@@ -1,21 +1,15 @@
-#include <SFML/Graphics.hpp>
+#include "../include/Ardelio.h"
 
 int main()
 {
-    auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
-    window.setFramerateLimit(144);
+    GameWindow window({1280u, 720u}, "Ardelio");
+    
+    auto root = std::make_shared<GameObject>();    
+    window.root = root;
 
-    while (window.isOpen())
-    {
-        while (const std::optional event = window.pollEvent())
-        {
-            if (event->is<sf::Event::Closed>())
-            {
-                window.close();
-            }
-        }
+    const Texture texture("assets/test.png");
+    auto sprite = std::make_shared<Sprite2D>(&texture);
+    root.get()->addChild(sprite);
 
-        window.clear();
-        window.display();
-    }
+    window.run();
 }

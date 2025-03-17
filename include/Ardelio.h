@@ -1,0 +1,7 @@
+#include "../src/GameObjects/GameObject.h"
+#include "../src/GameObjects/Sprite2D.h"
+#include "../src/Math/Vector2I.h"
+#include "../src/Math/Vector3.h"
+#include "../src/Resources/Resource.h"
+#include "../src/Resources/Texture.h"
+#include "../src/Systems/GameWindow.h"
