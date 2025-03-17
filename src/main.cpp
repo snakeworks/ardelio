@@ -2,14 +2,33 @@
 
 int main()
 {
+    /*Input::addAction({
+        "move_right",
+        Keycode::D
+    });
+    Input::addAction({
+        "move_left",
+        Keycode::A
+    });
+    Input::addAction({
+        "move_up",
+        Keycode::W
+    });
+    Input::addAction({
+        "move_down",
+        Keycode::S
+    });*/
+
     GameWindow window({1280u, 720u}, "Ardelio");
     
-    auto root = std::make_shared<GameObject>();    
-    window.root = root;
+    auto root = GameObject("Root");
+    window.root = &root;
+    
+    auto player = Player2D("Player", window.root);
+    player.speed = 160;
 
-    const Texture texture("assets/test.png");
-    auto sprite = std::make_shared<Sprite2D>(&texture);
-    root.get()->addChild(sprite);
+    Texture texture("assets/test.png");
+    auto sprite = Sprite2D("Sprite", &texture, &player);
 
     window.run();
 }

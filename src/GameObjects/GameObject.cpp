@@ -1,38 +1,65 @@
 #include "GameObject.h"
+#include <iostream>
 
-Vector3 *GameObject::getGlobalPosition() const
+GameObject::GameObject(char *name, GameObject *parent)
+    : name(name), m_parent(parent)
+{
+    if (parent)
+    {
+        parent->addChild(this);
+    }
+}
+
+GameObject::~GameObject()
+{
+    for (GameObject* child : m_children)
+    {
+        delete child;
+    }
+}
+
+Vector3 GameObject::getGlobalPosition() const
 {
     return GameObject::m_globalPosition;
 }
 
 void GameObject::setGlobalPosition(const Vector3 &position)
 {
-    *GameObject::m_globalPosition = position;
-    if (GameObject::m_parent != nullptr)
+    m_globalPosition = position;
+    std::cout << position.x << ", " << position.y << std::endl; 
+    if (m_parent)
     {
-        *GameObject::m_localPosition = position - *GameObject::m_parent->getGlobalPosition();
+        m_localPosition = m_globalPosition - m_parent->m_globalPosition;
     }
     else
     {
-        *GameObject::m_localPosition = position;
+        m_localPosition = m_globalPosition;
+    }
+    for (GameObject *child : m_children)
+    {
+        child->setGlobalPosition(child->getLocalPosition() + m_globalPosition);
     }
 }
 
-Vector3* GameObject::getLocalPosition() const
+Vector3 GameObject::getLocalPosition() const
 {
     return GameObject::m_localPosition;
 }
 
 void GameObject::setLocalPosition(const Vector3 &position)
 {
-    *GameObject::m_localPosition = position;
-    if (GameObject::m_parent != nullptr)
+    m_localPosition = position;
+    if (m_parent)
     {
-        *GameObject::m_globalPosition = position + *GameObject::m_parent->getGlobalPosition();
+        m_globalPosition = m_parent->m_globalPosition + m_localPosition;
+    } 
+    else 
+    {
+        m_globalPosition = m_localPosition;
     }
-    else
+    for (GameObject* child : m_children)
     {
-        *GameObject::m_globalPosition = position;
+        child->setGlobalPosition(child->m_localPosition + m_globalPosition);
     }
 }
 
@@ -46,13 +73,13 @@ GameObject* GameObject::getParent()
     return GameObject::m_parent;
 }
 
-void GameObject::addChild(std::shared_ptr<GameObject> child)
+void GameObject::addChild(GameObject* child)
 {
     m_children.push_back(child);
     child->setParent(this);
 }
 
-std::vector<std::shared_ptr<GameObject>> GameObject::getChildren()
+std::vector<GameObject*> GameObject::getChildren()
 {
     return m_children;
 }

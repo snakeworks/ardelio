@@ -7,7 +7,7 @@ class GameWindow
 {
 public:
     GameWindow(const Vector2I &resolution, const char *title);
-    std::shared_ptr<GameObject> root;
+    GameObject* root;
     
     void run();
 private:
