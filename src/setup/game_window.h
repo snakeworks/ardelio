@@ -15,5 +15,5 @@ private:
     Vector2U _resolution;
     std::string _title;
     GameObject *_root;
-    void _process(sf::RenderWindow *window, GameObject *start);
+    void _process(sf::RenderWindow *window, GameObject *start, const float &delta);
 };

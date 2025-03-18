@@ -17,28 +17,31 @@ void GameWindow::load_root(GameObject *new_root, bool unallocate_previous) {
 }
 
 void GameWindow::run() {
+    sf::Clock clock = sf::Clock();
     sf::RenderWindow window(sf::VideoMode({_resolution.x, _resolution.y}), _title);
     while (window.isOpen()) {
+        float delta = clock.restart().asSeconds();
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
         }
 
-        window.clear(sf::Color(25, 25, 25));
-        _process(&window, _root);
+        window.clear(sf::Color(15, 15, 15));
+        _process(&window, _root, delta);
         
         // TODO: Fix segfault when window.display() is called
         window.display();
     }
 }
 
-void GameWindow::_process(sf::RenderWindow *window, GameObject *start) {
-    if (start == nullptr) {
+void GameWindow::_process(sf::RenderWindow *window, GameObject *current, const float &delta) {
+    if (current == nullptr) {
         return;
     }
-    start->render(window);
-    for (const auto &child : start->get_children()) {
-        _process(window, child);
+    current->render(window);
+    current->update(delta);
+    for (const auto &child : current->get_children()) {
+        _process(window, child, delta);
     }
 }
