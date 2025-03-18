@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game_object.h"
+#include "math/color.h"
 #include "resources/texture.h"
 
 #include <string>
@@ -13,7 +14,11 @@ public:
 
     const Texture &get_texture() const;
     void set_texture(const Texture &new_texture);
+
+    const Color &get_modulate() const;
+    void set_modulate(const Color &new_color);
 private:
     Texture _texture;
+    Color _modulate;
     sf::Sprite _sf_sprite;
 };

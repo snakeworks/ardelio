@@ -5,14 +5,14 @@ public:
     Vector3(float x = 0, float y = 0, float z = 0);
     float x, y, z;
     
-    static Vector3 zero;
-    static Vector3 one;
-    static Vector3 up;
-    static Vector3 down;
-    static Vector3 forward;
-    static Vector3 back;
-    static Vector3 right;
-    static Vector3 left;
+    static const Vector3 zero;
+    static const Vector3 one;
+    static const Vector3 up;
+    static const Vector3 down;
+    static const Vector3 forward;
+    static const Vector3 back;
+    static const Vector3 right;
+    static const Vector3 left;
 
     Vector3 operator+(const Vector3 &other) const;
     Vector3 operator-(const Vector3 &other) const;
