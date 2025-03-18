@@ -3,7 +3,7 @@
 #include <algorithm>
 
 GameObject::GameObject(const std::string &name)
-    : _name(name), _parent(nullptr), _children({}) {}
+    : _name(name), _local_position(Vector3::zero), _parent(nullptr), _children({}) {}
 
 GameObject::~GameObject() {
     for (GameObject *child : _children) {
@@ -11,6 +11,9 @@ GameObject::~GameObject() {
     }
     _children.clear();
 }
+
+void GameObject::render(sf::RenderWindow *window) {}
+void GameObject::update(float delta) {}
 
 std::string GameObject::get_name() const {
     return _name;
@@ -60,3 +63,37 @@ void GameObject::reparent(GameObject *new_parent) {
         new_parent->add_child(this);
     }
 }
+
+Vector3 GameObject::get_local_position() const {
+    return _local_position;
+}
+
+void GameObject::set_local_position(const Vector3 &new_position) {
+    _local_position = new_position;
+    for (GameObject *child : _children) {
+        if (child) {
+            child->set_global_position(get_global_position() + child->get_local_position());
+        }
+    }
+}
+
+Vector3 GameObject::get_global_position() const {
+    if (_parent) {
+        return _parent->get_global_position() + _local_position;
+    }
+    return _local_position;
+}
+
+void GameObject::set_global_position(const Vector3 &new_position) {
+    if (_parent) {
+        _local_position = new_position - _parent->get_global_position();
+    } else {
+        _local_position = new_position;
+    }
+    for (GameObject *child : _children) {
+        if (child) {
+            child->set_global_position(new_position + child->get_local_position());
+        }
+    }
+}
+

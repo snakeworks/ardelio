@@ -38,3 +38,6 @@ install(EXPORT ArdelioTargets
     NAMESPACE Ardelio::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Ardelio
 )
+
+add_executable(main src/main.cpp)
+target_link_libraries(main PRIVATE ardelio SFML::Graphics)
