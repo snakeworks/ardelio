@@ -38,7 +38,7 @@ const std::vector<GameObject*> &GameObject::get_children() const {
 }
 
 void GameObject::add_child(GameObject *child) {
-    if (child) {
+    if (child && child->_parent == nullptr) {
         child->_parent = this;
         _children.push_back(child);
     }
@@ -58,12 +58,15 @@ GameObject *GameObject::get_parent() const {
     return _parent;
 }
 
-void GameObject::reparent(GameObject *new_parent) {
+void GameObject::reparent(GameObject *new_parent, bool keep_global_position) {
     if (_parent) {
         _parent->remove_child(this);
     }
     if (new_parent) {
         new_parent->add_child(this);
+        if (!keep_global_position) {
+            this->set_global_position(new_parent->get_global_position());
+        }
     }
 }
 

@@ -25,7 +25,7 @@ public:
     GameObject *remove_child(GameObject *child);
 
     GameObject *get_parent() const;
-    void reparent(GameObject *new_parent);
+    void reparent(GameObject *new_parent, bool keep_global_position = true);
     
     Vector3 get_local_position() const;
     void set_local_position(const Vector3 &new_position);
