@@ -3,6 +3,8 @@ project(Ardelio LANGUAGES CXX)
 
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 add_library(ardelio STATIC ${SRC_FILES})
 
 target_include_directories(ardelio PUBLIC

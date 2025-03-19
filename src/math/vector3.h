@@ -14,6 +14,11 @@ public:
     static const Vector3 right;
     static const Vector3 left;
 
+    float length() const;
+    float length_squared() const;
+    void normalize();
+
     Vector3 operator+(const Vector3 &other) const;
     Vector3 operator-(const Vector3 &other) const;
+    Vector3 operator*(float scalar) const;
 };

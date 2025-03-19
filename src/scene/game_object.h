@@ -11,7 +11,7 @@
 class GameObject {
 public:
     GameObject(const std::string &name);
-    ~GameObject();
+    void free();
     
     virtual void render(sf::RenderWindow *window);
     virtual void update(float delta);

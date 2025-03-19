@@ -4,6 +4,8 @@ Sprite2D::Sprite2D(const std::string &name, Texture &texture)
     : GameObject(name), _texture(texture), _sf_sprite(_texture.get_sf_texture()), _modulate(Color::white) {}
 
 void Sprite2D::render(sf::RenderWindow *window) {
+    auto global_pos = get_global_position();
+    _sf_sprite.setPosition({global_pos.x, global_pos.y});
     window->draw(_sf_sprite);
 }
 

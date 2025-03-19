@@ -1,5 +1,6 @@
 #include "setup/game_window.h"
 #include "scene/game_object.h"
 #include "scene/sprite_2d.h"
+#include "scene/player_2d.h"
 #include "resources/resource.h"
 #include "resources/texture.h"

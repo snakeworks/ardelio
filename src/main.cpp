@@ -4,11 +4,13 @@ int main() {
     GameObject root("Root");
 
     Texture white_texture("assets/white32x32.png");
+    Player2D player("Player");
     Sprite2D square("Square", white_texture);
-    
+    player.add_child(&square);
+
     square.set_modulate(Color(0, 200, 100, 255));
 
-    root.add_child(&square);
+    root.add_child(&player);
 
     GameWindow window({1280u, 720u}, "Test", &root);
 

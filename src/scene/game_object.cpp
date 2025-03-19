@@ -1,13 +1,16 @@
 #include "game_object.h"
 
 #include <algorithm>
+#include <iostream>
 
 GameObject::GameObject(const std::string &name)
     : _name(name), _local_position(Vector3::zero), _parent(nullptr), _children({}) {}
 
-GameObject::~GameObject() {
+void GameObject::free() {
     for (GameObject *child : _children) {
-        delete child;
+        if (child != nullptr) {
+            delete child;
+        }
     }
     _children.clear();
 }
