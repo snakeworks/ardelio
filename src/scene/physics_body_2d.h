@@ -8,37 +8,37 @@ public:
     PhysicsBody2D(const std::string &name, const CollisionShape &shape);
 
     void reset();
-    void reset(const Vector2 &v);
+    void reset(const Vector2 &position);
 
     CollisionShape get_shape() const;
     void set_shape(const CollisionShape &new_shape);
 
     Vector2 get_temp_position();
-    void set_temp_position(const Vector2 &v);
+    void set_temp_position(const Vector2 &new_temp_position);
     
     Vector2 get_velocity() const;
-    void set_velocity(const Vector2 &v);
+    void set_velocity(const Vector2 &new_velocity);
     Vector2 get_temp_velocity() const;
-    void set_temp_velocity(const Vector2& v);
+    void set_temp_velocity(const Vector2 &new_temp_velocity);
     
     Vector2 get_acceleration() const;
-    void set_acceleration(const Vector2& v);
-    void apply_acceleration(const Vector2& v);
+    void set_acceleration(const Vector2 &new_acceleration);
+    void apply_acceleration(const Vector2 &applied_acceleration);
     
     Vector2 get_force() const;
-    void set_force(const Vector2& v);
-    void apply_force(const Vector2& v);
+    void set_force(const Vector2 &new_force);
+    void apply_force(const Vector2 &applied_force);
     
     float get_theta_dot() const;
-    void set_theta_dot(float t);
+    void set_theta_dot(float new_theta_dot);
     
     float get_theta_dot_dot() const;
-    void set_theta_dot_dot(float t);
-    void apply_theta_dot_dot(float t);
-    void apply_itheta_dot_dot(float t);
+    void set_theta_dot_dot(float new_theta_dot_dot);
+    void apply_theta_dot_dot(float applied_theta_dot_dot);
     
     float get_itheta_dot_dot() const;
-    void set_itheta_dot_dot(float t);
+    void set_itheta_dot_dot(float new_itheta_dot_dot);
+    void apply_itheta_dot_dot(float applied_itheta_dot_dot);
     
     float get_intertia() const;
     float get_mass() const;
