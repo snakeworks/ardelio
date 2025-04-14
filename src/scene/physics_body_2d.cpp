@@ -108,6 +108,10 @@ float PhysicsBody2D::get_mass() const {
     return _mass; 
 }
 
+void PhysicsBody2D::set_mass(float mass) {
+    _mass = mass;
+}
+
 float PhysicsBody2D::get_restitution() const { 
     return _restitution; 
 }

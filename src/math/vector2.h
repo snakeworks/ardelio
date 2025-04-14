@@ -7,6 +7,10 @@ public:
 
     static const Vector2 zero;
     static const Vector2 one;
+    static const Vector2 up;
+    static const Vector2 down;
+    static const Vector2 right;
+    static const Vector2 left;
 
     Vector2 operator+(const Vector2 &other) const;
     Vector2 operator-(const Vector2 &other) const;

@@ -4,7 +4,7 @@
 int main() {
     GameObject root("Root");
     
-    Texture white_texture("assets/white32x32.png");
+    Texture white_texture("assets/white64x64.png");
     
     Player2D player("Player");
     player.speed = 250;
@@ -13,6 +13,7 @@ int main() {
     Sprite2D player_sprite("PlayerSprite", white_texture);
     player_sprite.set_modulate(Color(0, 200, 100, 255));
     player.add_child(&player_sprite);
+    player_sprite.set_size({32u, 32u});
     
     root.add_child(&player);
     
@@ -23,18 +24,18 @@ int main() {
     Sprite2D rigid_sprite("RigidSprite", white_texture);
     rigid_sprite.set_size({32u, 32u});
     rigid_body.add_child(&rigid_sprite);
-    rigid_body.set_global_position_2d({600, 100});
+    rigid_body.set_global_position_2d({580, 100});
     root.add_child(&rigid_body);
     window.get_physics_space_2d()->add_body(&rigid_body);
 
-    PhysicsBody2D rigid_body2("RigidBody2", CollisionShape(Vector2(32.0f, 32.0f)));
-    rigid_body2.set_static(false);
-    Sprite2D rigid_sprite2("RigidSprite2", white_texture);
-    rigid_sprite2.set_size({32u, 32u});
-    rigid_body2.add_child(&rigid_sprite2);
-    rigid_body2.set_global_position_2d({628, 60});
-    root.add_child(&rigid_body2);
-    window.get_physics_space_2d()->add_body(&rigid_body2);
+    // PhysicsBody2D rigid_body2("RigidBody2", CollisionShape(Vector2(32.0f, 32.0f)));
+    // rigid_body2.set_static(false);
+    // Sprite2D rigid_sprite2("RigidSprite2", white_texture);
+    // rigid_sprite2.set_size({32u, 32u});
+    // rigid_body2.add_child(&rigid_sprite2);
+    // rigid_body2.set_global_position_2d({628, 60});
+    // root.add_child(&rigid_body2);
+    // window.get_physics_space_2d()->add_body(&rigid_body2);
     
     PhysicsBody2D static_body("StaticBody", CollisionShape(Vector2(500.0f, 32.0f)));
     static_body.set_static(true);
@@ -44,6 +45,28 @@ int main() {
     static_body.add_child(&static_sprite);
     root.add_child(&static_body);
     window.get_physics_space_2d()->add_body(&static_body);
+
+    PhysicsBody2D static_body2("StaticBody2", CollisionShape(Vector2(32.0f, 500.0f)));
+    static_body2.set_static(true);
+    static_body2.set_mass(4.0f);
+    static_body2.set_global_position_2d({350, 350});
+    Sprite2D static_sprite2("StaticSprite2", white_texture);
+    static_sprite2.set_size({static_cast<uint32_t>(static_body2.get_shape().get_size().x), static_cast<uint32_t>(static_body2.get_shape().get_size().y)});
+    static_body2.add_child(&static_sprite2);
+    root.add_child(&static_body2);
+    window.get_physics_space_2d()->add_body(&static_body2);
+
+    PhysicsBody2D static_body3("StaticBody3", CollisionShape(Vector2(32.0f, 500.0f)));
+    static_body3.set_mass(4.0f);
+    static_body3.set_static(true);
+    static_body3.set_global_position_2d({850, 350});
+    Sprite2D static_sprite3("StaticSprite3", white_texture);
+    static_sprite3.set_size({static_cast<uint32_t>(static_body3.get_shape().get_size().x), static_cast<uint32_t>(static_body3.get_shape().get_size().y)});
+    static_body3.add_child(&static_sprite3);
+    root.add_child(&static_body3);
+    window.get_physics_space_2d()->add_body(&static_body3);
+
+    window.get_physics_space_2d()->add_body(&player);
 
     window.run();
 }

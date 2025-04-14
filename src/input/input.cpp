@@ -21,13 +21,22 @@ const bool Input::is_pressed(const Keycode keycode) {
     return _map[keycode];
 }
 
-const Vector3 Input::as_vector(Keycode left, Keycode right, Keycode up, Keycode down) {
-    Vector3 vector = Vector3::zero;
+const bool Input::was_pressed_this_frame(const Keycode keycode) {
+    static std::unordered_map<Keycode, bool> previous_frame_map = _map;
 
-    if (is_pressed(left)) vector = vector + Vector3::left;
-    if (is_pressed(right)) vector = vector + Vector3::right;
-    if (is_pressed(up)) vector = vector + Vector3::up;
-    if (is_pressed(down)) vector = vector + Vector3::down;
+    bool was_pressed = _map[keycode] && !previous_frame_map[keycode];
+    previous_frame_map = _map;
+
+    return was_pressed;
+}
+
+const Vector2 Input::as_vector(Keycode left, Keycode right, Keycode up, Keycode down) {
+    Vector2 vector = Vector2::zero;
+
+    if (is_pressed(left)) vector = vector + Vector2::left;
+    if (is_pressed(right)) vector = vector + Vector2::right;
+    if (is_pressed(up)) vector = vector + Vector2::up;
+    if (is_pressed(down)) vector = vector + Vector2::down;
 
     return vector;
 }

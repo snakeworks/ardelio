@@ -40,13 +40,15 @@ public:
     void set_itheta_dot_dot(float new_itheta_dot_dot);
     void apply_itheta_dot_dot(float applied_itheta_dot_dot);
     
-    float get_intertia() const;
     float get_mass() const;
+    void set_mass(float new_mass);
+
+    float get_intertia() const;
     float get_restitution() const;
     
     bool get_static() const;
     void set_static(bool new_static);
-    
+
 protected:
     bool _static;
     

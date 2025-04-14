@@ -1,6 +1,6 @@
 #include "physics_space_2d.h"
 
-PhysicsSpace2D::PhysicsSpace2D() : _gravity({ 0.0f, 100.0f }), _drag{ 0.05f, 0.001f }, _drag_rotational{ 0.01f, 0.01f } {}
+PhysicsSpace2D::PhysicsSpace2D() : _gravity({ 0.0f, 1000.0f }), _drag{ 0.05f, 0.001f }, _drag_rotational{ 0.01f, 0.01f } {}
 
 void PhysicsSpace2D::set_gravity(const Vector2& v) {
     _gravity = v;
@@ -68,7 +68,7 @@ void PhysicsSpace2D::circle_vs_circle_collision(PhysicsBody2D *o, PhysicsBody2D 
     }
 }
 
-void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D* o, PhysicsBody2D* p, bool circle) {
+void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsBody2D *p, bool circle) {
     Vector2 pos_o;
     Vector2 len_o;
     Vector2 pos_p;
@@ -80,8 +80,7 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D* o, PhysicsBody
         len_o = o->get_shape().get_radius();
         pos_p = p->get_global_position_2d();
         len_p = p->get_shape().get_size() / 2.0f;
-    }
-    else {
+    } else {
         pos_p = p->get_global_position_2d();
         len_p = p->get_shape().get_radius();
         pos_o = o->get_global_position_2d();
@@ -92,7 +91,6 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D* o, PhysicsBody
         pos_o.y - len_o.y < pos_p.y + len_p.y && pos_o.y + len_o.y > pos_p.y - len_p.y;
 
     if (condition) {
-
         float dx = (len_p.x + len_o.x) - abs(pos_p.x - pos_o.x);
         float dy = (len_p.y + len_o.y) - abs(pos_p.y - pos_o.y);
 
@@ -104,8 +102,7 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D* o, PhysicsBody
             if (pos_o.x < pos_p.x) {
                 normalUnit = { -1.0f, 0.0f };
                 reverse_i_j = normalUnit * dx;
-            }
-            else {
+            } else {
                 normalUnit = { 1.0f, 0.0f };
                 reverse_i_j = normalUnit * dx;
             }
@@ -114,8 +111,7 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D* o, PhysicsBody
             if (pos_o.y < pos_p.y) {
                 normalUnit = { 0.0f, -1.0f };
                 reverse_i_j = normalUnit * dy;
-            }
-            else {
+            } else {
                 normalUnit = { 0.0f, 1.0f };
                 reverse_i_j = normalUnit * dy;
             }
@@ -145,7 +141,7 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D* o, PhysicsBody
     }
 }
 
-void PhysicsSpace2D::rectangle_vs_rectangle_collision(PhysicsBody2D* o, PhysicsBody2D* p) {
+void PhysicsSpace2D::rectangle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsBody2D *p) {
     Vector2 pos_o = o->get_global_position_2d();
     Vector2 len_o = o->get_shape().get_size() / 2.0f;
     Vector2 pos_p = p->get_global_position_2d();
@@ -167,18 +163,15 @@ void PhysicsSpace2D::rectangle_vs_rectangle_collision(PhysicsBody2D* o, PhysicsB
             if (pos_o.x < pos_p.x) {
                 normal_unit = { -1.0f, 0.0f };
                 correction = normal_unit * dx;
-            }
-            else {                  
+            } else {                  
                 normal_unit = { 1.0f, 0.0f };
                 correction = normal_unit * dx;
             }
-        }
-        else {
+        } else {
             if (pos_o.y < pos_p.y) {
                 normal_unit = { 0.0f, -1.0f };
                 correction = normal_unit * dy;
-            }
-            else {
+            } else {
                 normal_unit = { 0.0f, 1.0f };
                 correction = normal_unit * dy;
             }
@@ -193,11 +186,9 @@ void PhysicsSpace2D::rectangle_vs_rectangle_collision(PhysicsBody2D* o, PhysicsB
             float totalMass = o->get_mass() + p->get_mass();
             o->set_temp_position(o->get_temp_position() + correction_i_j * (p->get_mass() / totalMass));
             p->set_temp_position(p->get_temp_position() - correction_i_j * (o->get_mass() / totalMass));
-        }
-        else if (!o->get_static()) {
+        } else if (!o->get_static()) {
             o->set_temp_position(o->get_temp_position() + correction_i_j);
-        }
-        else if (!p->get_static()) {
+        } else if (!p->get_static()) {
             p->set_temp_position(p->get_temp_position() - correction_i_j);
         }
 
@@ -230,9 +221,9 @@ void PhysicsSpace2D::physics_update(float delta) {
 
         //drag
         float speed = o->get_velocity().magnitude();
-        Vector2 velocityUnit = o->get_velocity().normalized();
-        o->apply_force(velocityUnit * speed * -_drag.x);
-        o->apply_force(velocityUnit * speed * speed * -_drag.y);
+        Vector2 velocity_unit = o->get_velocity().normalized();
+        o->apply_force(velocity_unit * speed * -_drag.x);
+        o->apply_force(velocity_unit * speed * speed * -_drag.y);
 
         // Rotational drag
         float ang_speed = abs(o->get_theta_dot());
@@ -267,31 +258,25 @@ void PhysicsSpace2D::physics_update(float delta) {
         o->set_temp_position(o->get_global_position_2d());
     }
 
-    for (PhysicsBody2D* o : _bodies) {
+    for (PhysicsBody2D *o : _bodies) {
         // Static Bodies can be targets (collided with and resolved from), but are not resolved themselves.
         if (o->get_static()) {
             continue;
         }
 
-        for (PhysicsBody2D* p : _bodies) {
+        for (PhysicsBody2D *p : _bodies) {
             if (o == p) {
                 continue;
             }
 
             if (o->get_shape().is_circle() && p->get_shape().is_circle()) {
-                circle_vs_circle_collision(o, p);					
-            }
-
-            else if (o->get_shape().is_circle() && p->get_shape().is_rectangle()) {
+                circle_vs_circle_collision(o, p);
+            } else if (o->get_shape().is_circle() && p->get_shape().is_rectangle()) {
                 circle_vs_rectangle_collision(o, p, true);
-            }
-
-            else if (o->get_shape().is_rectangle() && p->get_shape().is_circle()) {
+            } else if (o->get_shape().is_rectangle() && p->get_shape().is_circle()) {
                 circle_vs_rectangle_collision(o, p, false);
-            }
-
-            else if (o->get_shape().is_rectangle() && p->get_shape().is_rectangle()) {
-                rectangle_vs_rectangle_collision(o, p);	
+            } else if (o->get_shape().is_rectangle() && p->get_shape().is_rectangle()) {
+                rectangle_vs_rectangle_collision(o, p);
             }
         }
     }

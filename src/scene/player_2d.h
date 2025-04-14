@@ -1,8 +1,8 @@
 #pragma once
 
-#include "game_object.h"
+#include "physics_body_2d.h"
 
-class Player2D : public GameObject {
+class Player2D : public PhysicsBody2D {
 public:
     Player2D(const std::string &name);
     void update(float delta) override;
