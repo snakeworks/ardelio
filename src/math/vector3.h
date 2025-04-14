@@ -1,5 +1,7 @@
 #pragma once
 
+#include "vector2.h"
+
 struct Vector3 {
 public:
     Vector3(float x = 0, float y = 0, float z = 0);
@@ -17,8 +19,13 @@ public:
     float length() const;
     float length_squared() const;
     void normalize();
+    Vector3 normalized();
+    float distance(const Vector3 &other) const;
 
     Vector3 operator+(const Vector3 &other) const;
+    Vector3 operator+(const Vector2 &other) const;
     Vector3 operator-(const Vector3 &other) const;
+    Vector3 operator-(const Vector2 &other) const;
     Vector3 operator*(float scalar) const;
+    Vector3 operator/(float scalar) const;
 };

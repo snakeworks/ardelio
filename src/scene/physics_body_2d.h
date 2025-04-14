@@ -1,0 +1,67 @@
+#pragma once
+
+#include "game_object.h"
+#include "resources/collision_shape.h"
+
+class PhysicsBody2D : public GameObject {
+public:
+    PhysicsBody2D(const std::string &name, const CollisionShape &shape);
+
+    void reset();
+    void reset(const Vector2 &v);
+
+    CollisionShape get_shape() const;
+    void set_shape(const CollisionShape &new_shape);
+
+    Vector2 get_temp_position();
+    void set_temp_position(const Vector2 &v);
+    
+    Vector2 get_velocity() const;
+    void set_velocity(const Vector2 &v);
+    Vector2 get_temp_velocity() const;
+    void set_temp_velocity(const Vector2& v);
+    
+    Vector2 get_acceleration() const;
+    void set_acceleration(const Vector2& v);
+    void apply_acceleration(const Vector2& v);
+    
+    Vector2 get_force() const;
+    void set_force(const Vector2& v);
+    void apply_force(const Vector2& v);
+    
+    float get_theta_dot() const;
+    void set_theta_dot(float t);
+    
+    float get_theta_dot_dot() const;
+    void set_theta_dot_dot(float t);
+    void apply_theta_dot_dot(float t);
+    void apply_itheta_dot_dot(float t);
+    
+    float get_itheta_dot_dot() const;
+    void set_itheta_dot_dot(float t);
+    
+    float get_intertia() const;
+    float get_mass() const;
+    float get_restitution() const;
+    
+    bool get_static() const;
+    void set_static(bool new_static);
+    
+protected:
+    bool _static;
+    
+    CollisionShape _shape;
+
+    Vector2 _velocity;
+    Vector2 _temp_position;
+    Vector2 _temp_velocity;
+    Vector2 _acceleration;
+    Vector2 _force;
+    
+    float _mass;
+    float _restitution;
+    float _theta_dot;
+    float _theta_dot_dot;
+    float _itheta_dot_dot;
+    float _inertia;
+};

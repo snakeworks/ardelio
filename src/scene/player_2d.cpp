@@ -1,8 +1,6 @@
 #include "player_2d.h"
 #include "input/input.h"
 
-#include <iostream>
-
 Player2D::Player2D(const std::string &name)
     : GameObject(name), speed(160) {}
 

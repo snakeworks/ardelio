@@ -40,14 +40,38 @@ void Vector3::normalize() {
     }
 }
 
+Vector3 Vector3::normalized() {
+    Vector3 v = *this;
+	v.normalize();
+	return v;   
+}
+
+float Vector3::distance(const Vector3 &other) const {
+    return std::sqrt((x - other.x) * (x - other.x) +
+                     (y - other.y) * (y - other.y) +
+                     (z - other.z) * (z - other.z));
+} 
+
 Vector3 Vector3::operator+(const Vector3 &other) const {
     return Vector3(x + other.x, y + other.y, z + other.z);
+}
+
+Vector3 Vector3::operator+(const Vector2 &other) const {
+    return Vector3(x + other.x, y + other.y, z);
 }
 
 Vector3 Vector3::operator-(const Vector3 &other) const {
     return Vector3(x - other.x, y - other.y, z - other.z);
 }
 
+Vector3 Vector3::operator-(const Vector2 &other) const {
+    return Vector3(x - other.x, y - other.y, z);
+}
+
 Vector3 Vector3::operator*(float scalar) const {
     return Vector3(x * scalar, y * scalar, z * scalar);
+}
+
+Vector3 Vector3::operator/(float scalar) const {
+    return Vector3(x / scalar, y / scalar, z / scalar);
 }

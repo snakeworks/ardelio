@@ -1,5 +1,6 @@
 #pragma once
 
+#include "math/vector2.h"
 #include "math/vector3.h"
 
 #include <string>
@@ -15,6 +16,7 @@ public:
     
     virtual void render(sf::RenderWindow *window);
     virtual void update(float delta);
+    virtual void physics_update(float delta);
     
     std::string get_name() const;
     void set_name(const std::string &name);
@@ -28,13 +30,22 @@ public:
     void reparent(GameObject *new_parent, bool keep_global_position = true);
     
     Vector3 get_local_position() const;
+    Vector2 get_local_position_2d() const;
     void set_local_position(const Vector3 &new_position);
+    void set_local_position_2d(const Vector2 &new_position);
+    
     Vector3 get_global_position() const;
+    Vector2 get_global_position_2d() const;
     void set_global_position(const Vector3 &new_position);
+    void set_global_position_2d(const Vector2 &new_position);
+
+    float get_rotation() const;
+    void set_rotation(float new_rotation);
 
 private:
     std::string _name;
     Vector3 _local_position;
+    float _rotation;
     GameObject *_parent;
     std::vector<GameObject*> _children;
 };

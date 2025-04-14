@@ -1,10 +1,9 @@
 #include "game_object.h"
 
 #include <algorithm>
-#include <iostream>
 
 GameObject::GameObject(const std::string &name)
-    : _name(name), _local_position(Vector3::zero), _parent(nullptr), _children({}) {}
+    : _name(name), _local_position(Vector3::zero), _rotation(0.0f), _parent(nullptr), _children({}) {}
 
 void GameObject::free() {
     for (GameObject *child : _children) {
@@ -17,6 +16,7 @@ void GameObject::free() {
 
 void GameObject::render(sf::RenderWindow *window) {}
 void GameObject::update(float delta) {}
+void GameObject::physics_update(float delta) {}
 
 std::string GameObject::get_name() const {
     return _name;
@@ -74,6 +74,10 @@ Vector3 GameObject::get_local_position() const {
     return _local_position;
 }
 
+Vector2 GameObject::get_local_position_2d() const {
+    return { _local_position.x, _local_position.y };
+}
+
 void GameObject::set_local_position(const Vector3 &new_position) {
     _local_position = new_position;
     for (GameObject *child : _children) {
@@ -83,11 +87,20 @@ void GameObject::set_local_position(const Vector3 &new_position) {
     }
 }
 
+void GameObject::set_local_position_2d(const Vector2 &new_positon) {
+    set_local_position({new_positon.x, new_positon.y, get_local_position().z});
+}
+
 Vector3 GameObject::get_global_position() const {
     if (_parent) {
         return _parent->get_global_position() + _local_position;
     }
     return _local_position;
+}
+
+Vector2 GameObject::get_global_position_2d() const {
+    auto global_pos = get_global_position();
+    return { global_pos.x, global_pos.y };
 }
 
 void GameObject::set_global_position(const Vector3 &new_position) {
@@ -99,6 +112,23 @@ void GameObject::set_global_position(const Vector3 &new_position) {
     for (GameObject *child : _children) {
         if (child) {
             child->set_global_position(new_position + child->get_local_position());
+        }
+    }
+}
+
+void GameObject::set_global_position_2d(const Vector2 &new_position) {
+    set_global_position({new_position.x, new_position.y, get_global_position().z});
+}
+
+float GameObject::get_rotation() const {
+    return _rotation;
+}
+
+void GameObject::set_rotation(float new_rotation) {
+    _rotation = new_rotation;
+    for (GameObject *child : _children) {
+        if (child) {
+            child->set_rotation(new_rotation);
         }
     }
 }
