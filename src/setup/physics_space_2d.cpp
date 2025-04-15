@@ -53,17 +53,30 @@ void PhysicsSpace2D::circle_vs_circle_collision(PhysicsBody2D *o, PhysicsBody2D 
         float normal_speed_o = o->get_velocity().dot(normalUnit);
         float normal_speed_p = p->get_velocity().dot(normalUnit);
 
-        // Conservation of momentum and kinetic energy - elastic collision
-        float normal_speed_after_o = normal_speed_o * (o->get_mass() - p->get_mass()) / (o->get_mass() + p->get_mass()) + normal_speed_p * (2.0f * p->get_mass()) / (o->get_mass() + p->get_mass());
+        // Calculate combined restitution (usually the minimum or average of both objects)
+        float combined_restitution = o->get_restitution() * p->get_restitution();
+
+        // Conservation of momentum with restitution - partially elastic collision
+        float normal_speed_after_o = (normal_speed_o * (o->get_mass() - p->get_mass()) + 
+                                     2.0f * p->get_mass() * normal_speed_p) / 
+                                     (o->get_mass() + p->get_mass());
+        
+        // Apply restitution to the final velocity
+        normal_speed_after_o *= combined_restitution;
+        
         Vector2 normal_velocity = normalUnit * normal_speed_after_o;
-        Vector2 normal_velocity_i_j = { tangent_velocity.dot({1.0f, 0.0f}) + normal_velocity.dot({1.0f, 0.0f}) , tangent_velocity.dot({0.0f, 1.0f}) + normal_velocity.dot({0.0f, 1.0f}) };
+        Vector2 normal_velocity_i_j = { tangent_velocity.dot({1.0f, 0.0f}) + normal_velocity.dot({1.0f, 0.0f}) , 
+                                       tangent_velocity.dot({0.0f, 1.0f}) + normal_velocity.dot({0.0f, 1.0f}) };
         o->set_temp_velocity(normal_velocity_i_j);
 
-        // Avoid PhysicsSpace2D::getting stuck
+        // Avoid getting stuck
         float stuck = 0.01f;
-        if ((abs(p->get_global_position_2d().x - o->get_global_position_2d().x) < stuck) && (abs(p->get_global_position_2d().y - o->get_global_position_2d().y) < stuck)) {
-            o->set_temp_position({ o->get_global_position_2d().x - (o->get_shape().get_radius() + 0.1f), o->get_global_position_2d().y });
-            p->set_temp_position({ o->get_global_position_2d().x + (p->get_shape().get_radius() + 0.1f), o->get_global_position_2d().y });
+        if ((abs(p->get_global_position_2d().x - o->get_global_position_2d().x) < stuck) && 
+            (abs(p->get_global_position_2d().y - o->get_global_position_2d().y) < stuck)) {
+            o->set_temp_position({ o->get_global_position_2d().x - (o->get_shape().get_radius() + 0.1f), 
+                                  o->get_global_position_2d().y });
+            p->set_temp_position({ o->get_global_position_2d().x + (p->get_shape().get_radius() + 0.1f), 
+                                  o->get_global_position_2d().y });
         }
     }
 }
@@ -74,7 +87,7 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsBody
     Vector2 pos_p;
     Vector2 len_p;
 
-    // TODO: COULD BE WRONG???
+    // TODO: COULD BE WRONG??
     if (circle) {
         pos_o = o->get_global_position_2d();
         len_o = o->get_shape().get_radius();
@@ -127,8 +140,17 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsBody
         float normal_speed_o = o->get_velocity().dot(normalUnit);
         float normal_speed_p = p->get_velocity().dot(normalUnit);
 
-        // Conservation of momentum and kinetic energy - elastic collision
-        float normal_speed_after_o = normal_speed_o * (o->get_mass() - p->get_mass()) / (o->get_mass() + p->get_mass()) + normal_speed_p * (2.0f * p->get_mass()) / (o->get_mass() + p->get_mass());
+        // Calculate combined restitution
+        float combined_restitution = o->get_restitution() * p->get_restitution();
+
+        // Conservation of momentum with restitution
+        float normal_speed_after_o = (normal_speed_o * (o->get_mass() - p->get_mass()) + 
+                                     2.0f * p->get_mass() * normal_speed_p) / 
+                                     (o->get_mass() + p->get_mass());
+        
+        // Apply restitution
+        normal_speed_after_o *= combined_restitution;
+        
         Vector2 normal_velocity = normalUnit * normal_speed_after_o;
 
         Vector2 velocity_i_j = normal_velocity + tangent_velocity;
