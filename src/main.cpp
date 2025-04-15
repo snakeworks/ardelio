@@ -30,7 +30,7 @@ int main() {
     root.add_child(&player);
     
     GameWindow window({1280u, 720u}, "Test", &root);
-    
+
     // Rigid
     create_body(&window, {580, 100}, {32, 32}, 1.0f, false);
 

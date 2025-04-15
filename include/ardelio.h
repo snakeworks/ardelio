@@ -4,3 +4,4 @@
 #include "scene/player_2d.h"
 #include "resources/resource.h"
 #include "resources/texture.h"
+#include "scene/gui/text.h"

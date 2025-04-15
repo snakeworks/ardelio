@@ -7,8 +7,7 @@
 AudioFile jump_audio("assets/jump.wav");
 
 Player2D::Player2D(const std::string &name)
-    : PhysicsBody2D(name, CollisionShape({32.0f, 32.0f})), speed(160)
-{
+    : PhysicsBody2D(name, CollisionShape({32.0f, 32.0f})), speed(160) {
     set_mass(8.0f);
 }
 
