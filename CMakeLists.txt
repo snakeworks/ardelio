@@ -31,7 +31,7 @@ install(TARGETS ardelio
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-target_link_libraries(ardelio PRIVATE SFML::Graphics)
+target_link_libraries(ardelio PRIVATE SFML::Graphics SFML::Audio)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
@@ -42,4 +42,4 @@ install(EXPORT ArdelioTargets
 )
 
 add_executable(main src/main.cpp)
-target_link_libraries(main PRIVATE ardelio SFML::Graphics)
+target_link_libraries(main PRIVATE ardelio SFML::Graphics SFML::Audio)

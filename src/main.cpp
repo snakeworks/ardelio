@@ -18,7 +18,6 @@ void create_body(GameWindow *window, Vector2 position, Vector2 size, float mass 
 int main() {
     GameObject root("Root");
     
-    
     Player2D player("Player");
     player.speed = 250;
     player.set_global_position({1280/2, 720/2});
@@ -52,6 +51,7 @@ int main() {
     create_body(&window, {350, 350}, {32, 500}, 5.0f, true);
     create_body(&window, {850, 500}, {32, 200}, 5.0f, true);
     create_body(&window, {1034, 400}, {400, 32}, 5.0f, true);
+    create_body(&window, {1200, 200}, {32, 400}, 5.0f, true);
 
     window.get_physics_space_2d()->add_body(&player);
 
