@@ -192,7 +192,7 @@ void PhysicsSpace2D::rectangle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsB
             p->set_temp_position(p->get_temp_position() - correction_i_j);
         }
 
-        // Velocity resolution remains the same
+        // Velocity resolution with restitution
         Vector2 tangent_unit = normal_unit.get_normal();
         float tangent_speed = o->get_velocity().dot(tangent_unit);
         Vector2 tangent_velocity = tangent_unit * tangent_speed;
@@ -200,8 +200,16 @@ void PhysicsSpace2D::rectangle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsB
         float normal_speed_o = o->get_velocity().dot(normal_unit);
         float normal_speed_p = p->get_velocity().dot(normal_unit);
 
-        float normal_speed_after_o = normal_speed_o * (o->get_mass() - p->get_mass()) / (o->get_mass() + p->get_mass()) + 
-                                    normal_speed_p * (2.0f * p->get_mass()) / (o->get_mass() + p->get_mass());
+        // Calculate combined restitution
+        float combined_restitution = o->get_restitution() * p->get_restitution();
+
+        float normal_speed_after_o = (normal_speed_o * (o->get_mass() - p->get_mass()) + 
+                                     2.0f * p->get_mass() * normal_speed_p) / 
+                                     (o->get_mass() + p->get_mass());
+        
+        // Apply restitution
+        normal_speed_after_o *= combined_restitution;
+        
         Vector2 normal_velocity = normal_unit * normal_speed_after_o;
 
         Vector2 velocity_i_j = normal_velocity + tangent_velocity;

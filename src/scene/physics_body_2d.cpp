@@ -1,7 +1,7 @@
 #include "physics_body_2d.h"
 
 PhysicsBody2D::PhysicsBody2D(const std::string &name, const CollisionShape &shape) : GameObject(name), _shape(shape), _static(false), _mass(1.0f), 
-    _theta_dot(0.0f), _theta_dot_dot(0.0f), _itheta_dot_dot(0.0f), _inertia(1.0f),  _restitution(0.9f)
+    _theta_dot(0.0f), _theta_dot_dot(0.0f), _itheta_dot_dot(0.0f), _inertia(1.0f),  _restitution(1.0f)
 {}
 
 void PhysicsBody2D::reset() {
