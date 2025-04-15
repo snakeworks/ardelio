@@ -21,7 +21,7 @@ public:
     friend Vector2 operator/(int scalar, const Vector2 &vec);
 
     float dot(const Vector2 &other) const;
-    float magnitude() const;
+    float length() const;
     Vector2 get_normal() const;
     Vector2 normalized() const;
     float distance(const Vector2 &other) const;

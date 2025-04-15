@@ -44,7 +44,7 @@ float Vector2::dot(const Vector2 &other) const {
     return x * other.x + y * other.y;
 }
 
-float Vector2::magnitude() const {
+float Vector2::length() const {
     return std::sqrt(x * x + y * y);
 }
 
@@ -53,7 +53,7 @@ Vector2 Vector2::get_normal() const {
 }
 
 Vector2 Vector2::normalized() const {
-    float m = magnitude();
+    float m = length();
     return (m > 0) ? *this / m : Vector2();
 }
 

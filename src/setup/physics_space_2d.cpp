@@ -21,7 +21,7 @@ void PhysicsSpace2D::add_body(PhysicsBody2D *body) {
 bool PhysicsSpace2D::is_at_rest() {
     float err = 2.0f;
     for (PhysicsBody2D *o : _bodies) {
-        float v = o->get_velocity().magnitude();
+        float v = o->get_velocity().length();
         if (v > err) {
             return false;
         }
@@ -158,7 +158,7 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsBody
 
         // Temporary angular impulse
         int r = rand() % 2;
-        float ang_velocity = (r == 0) ? velocity_i_j.magnitude() : -velocity_i_j.magnitude();
+        float ang_velocity = (r == 0) ? velocity_i_j.length() : -velocity_i_j.length();
         o->set_theta_dot(ang_velocity / 2.0f);
     }
 }
@@ -250,7 +250,7 @@ void PhysicsSpace2D::physics_update(float delta) {
         o->set_acceleration(_gravity);
 
         //drag
-        float speed = o->get_velocity().magnitude();
+        float speed = o->get_velocity().length();
         Vector2 velocity_unit = o->get_velocity().normalized();
         o->apply_force(velocity_unit * speed * -_drag.x);
         o->apply_force(velocity_unit * speed * speed * -_drag.y);
@@ -316,7 +316,7 @@ void PhysicsSpace2D::physics_update(float delta) {
         o->set_global_position_2d(o->get_temp_position());
 
         // Clamp velocity to zero for slow very Bodies
-        if (o->get_velocity().magnitude() < 0.01f) {
+        if (o->get_velocity().length() < 0.01f) {
             o->set_velocity({ 0.0f, 0.0f });
         }
         if (abs(o->get_theta_dot()) < 0.01f) {
