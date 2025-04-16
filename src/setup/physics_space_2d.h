@@ -19,6 +19,7 @@ public:
 	void set_drag_rotational(const Vector2& v);
 
 	void add_body(PhysicsBody2D *body);
+	void remove_body(PhysicsBody2D *body);
 
 	bool is_at_rest();
 

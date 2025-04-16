@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include <SFML/Graphics.hpp>
 
+class GameWindow; // Forward declaration, I need this window man :(
+
 class GameObject {
 public:
     GameObject(const std::string &name);
@@ -17,6 +19,9 @@ public:
     virtual void render(sf::RenderWindow *window);
     virtual void update(float delta);
     virtual void physics_update(float delta);
+
+    GameWindow *get_window() const;
+    void set_window(GameWindow *window);
     
     std::string get_name() const;
     void set_name(const std::string &name);
@@ -44,6 +49,7 @@ public:
 
 private:
     std::string _name;
+    GameWindow *_window;
     Vector3 _local_position;
     float _rotation;
     GameObject *_parent;

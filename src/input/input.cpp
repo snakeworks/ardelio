@@ -7,13 +7,16 @@ Keycode Input::_from_sf_key(sf::Keyboard::Key sf_key) {
     return static_cast<Keycode>(key_index);
 } 
 
-const void Input::sf_on_event(const std::optional<sf::Event> &event) {
+const void Input::sf_on_event(const std::optional<sf::Event> &event, GameWindow *window) {
     if (event->is<sf::Event::KeyPressed>()) {
         Keycode keycode = _from_sf_key(event->getIf<sf::Event::KeyPressed>()->code);
         _map[keycode] = true;
     } else if (event->is<sf::Event::KeyReleased>()) {
         Keycode keycode = _from_sf_key(event->getIf<sf::Event::KeyReleased>()->code);
         _map[keycode] = false;
+    } else if (event->is<sf::Event::MouseMoved>()) {
+        auto mouse_event = event->getIf<sf::Event::MouseMoved>();
+        window->get_gui()->on_mouse_moved({mouse_event->position.x, mouse_event->position.y});
     }
 }
 

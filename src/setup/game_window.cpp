@@ -6,10 +6,8 @@
 std::vector<GameWindow*> GameWindow::_windows = {};
 
 GameWindow::GameWindow(const Vector2U &resolution, const std::string &title, GameObject *initial_root)
-    : _resolution(resolution), 
-    _title(title), 
-    _root(initial_root){
-        _windows.push_back(this);
+    : _resolution(resolution), _title(title), _root(initial_root) {
+    _windows.push_back(this);
 }
 
 GameWindow::~GameWindow() {
@@ -40,10 +38,15 @@ void GameWindow::load_root(GameObject *new_root, bool unallocate_previous) {
     if (new_root == nullptr) {
         return;
     }
-    if (unallocate_previous) {
-        _root->free();
+    if (_root != nullptr) {
+        on_game_object_exit(_root);
+        if (unallocate_previous) {
+            _root->free();
+        }
     }
     _root = new_root;
+    _root->set_window(this);
+    on_game_object_enter(_root);
 }
 
 void GameWindow::set_custom_update(std::function<void(float, sf::RenderWindow*)> func) {
@@ -59,7 +62,7 @@ void GameWindow::run() {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
-            Input::sf_on_event(event);
+            Input::sf_on_event(event, this);
         }
         
         window.clear(sf::Color(15, 15, 15));
@@ -74,9 +77,29 @@ void GameWindow::run() {
     }
 }
 
+void GameWindow::on_game_object_enter(GameObject *game_object) {
+    if (auto physics_body = dynamic_cast<PhysicsBody2D*>(game_object)) {
+        _physics_space_2d.add_body(physics_body);
+    } else if (auto gui_element = dynamic_cast<GUIElement*>(game_object)) {
+        _gui.add_gui_element(gui_element);
+    }
+}
+
+void GameWindow::on_game_object_exit(GameObject *game_object) {
+    if (auto physics_body = dynamic_cast<PhysicsBody2D*>(game_object)) {
+        _physics_space_2d.remove_body(physics_body);
+    } else if (auto gui_element = dynamic_cast<GUIElement*>(game_object)) {
+        _gui.remove_gui_element(gui_element);
+    }
+}
+
 PhysicsSpace2D *GameWindow::get_physics_space_2d() {
     return &_physics_space_2d;
 }
+
+GUI *GameWindow::get_gui() {
+    return &_gui;
+} 
 
 void GameWindow::_process(sf::RenderWindow *window, GameObject *current, const float &delta) {
     if (current == nullptr) {

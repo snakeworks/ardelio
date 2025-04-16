@@ -1,4 +1,5 @@
 #include "game_object.h"
+#include "setup/game_window.h"
 
 #include <algorithm>
 
@@ -26,6 +27,17 @@ void GameObject::set_name(const std::string &name) {
     _name = name;
 }
 
+GameWindow *GameObject::get_window() const {
+    return _window;
+}
+
+void GameObject::set_window(GameWindow *window) {
+    _window = window;
+    for (GameObject *child : _children) {
+        child->set_window(_window);
+    }
+}
+
 GameObject *GameObject::get_child(uint32_t index) const {
     if (index >= _children.size()) {
         return nullptr;
@@ -40,6 +52,7 @@ const std::vector<GameObject*> &GameObject::get_children() const {
 void GameObject::add_child(GameObject *child) {
     if (child && child->_parent == nullptr) {
         child->_parent = this;
+        child->set_window(_window);
         _children.push_back(child);
     }
 }
@@ -48,6 +61,7 @@ GameObject *GameObject::remove_child(GameObject *child) {
     auto it = std::find(_children.begin(), _children.end(), child);
     if (it != _children.end()) {
         _children.erase(it);
+        child->set_window(nullptr);
         child->_parent = nullptr;
         return child;
     }

@@ -18,6 +18,13 @@ void PhysicsSpace2D::add_body(PhysicsBody2D *body) {
     _bodies.push_back(body);
 }
 
+void PhysicsSpace2D::remove_body(PhysicsBody2D *body) {
+    auto it = std::find(_bodies.begin(), _bodies.end(), body);
+    if (it != _bodies.end()) {
+        _bodies.erase(it);
+    }
+}
+
 bool PhysicsSpace2D::is_at_rest() {
     float err = 2.0f;
     for (PhysicsBody2D *o : _bodies) {

@@ -46,6 +46,11 @@ int main() {
         }
     }
 
+    Font font("assets/ARIAL.TTF");
+    Text text("Text", "Hello World!", &font);
+    text.set_font_size(48);
+    root.add_child(&text);
+
     // Static
     create_body(&window, {600, 600}, {500, 32}, 5.0f, true);
     create_body(&window, {350, 350}, {32, 500}, 5.0f, true);
