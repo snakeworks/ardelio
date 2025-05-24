@@ -51,7 +51,7 @@ void EditorWindow::run() {
         // terrible but it works.
         ImGui::Begin("Viewport");
         static ImVec2 viewportSize{500, 500};
-        sf::RenderTexture viewportTexture({viewportSize.x, viewportSize.y});
+        sf::RenderTexture viewportTexture({static_cast<uint32_t>(viewportSize.x), static_cast<uint32_t>(viewportSize.y)});
         viewportTexture.clear(sf::Color::Black);
         viewportSize = ImGui::GetContentRegionAvail();
         ImGui::Image(viewportTexture);
@@ -118,14 +118,14 @@ void EditorWindow::_draw_editor() {
     ImGui::Begin("File System");
     std::function<void(const char*, const std::vector<std::string>&)> draw_folder = [&](const char* folder_name, const std::vector<std::string>& files) {
         if (ImGui::TreeNodeEx((std::string("[] ") + folder_name).c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-            for (const auto& file : files) {
-                ImGui::BulletText(file.c_str());
+            for (const auto &file : files) {
+                ImGui::Text("%s", file.c_str());
             }
             ImGui::TreePop();
         }
     };
 
-    draw_folder("Assets", {"Player.png", "Background.png", "MainScene.scene"});
+    draw_folder("data", {"player.png", "background.png", "main.ascn"});
     ImGui::End();
     
     // Drawing inspector
