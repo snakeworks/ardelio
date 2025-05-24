@@ -17,6 +17,8 @@ target_compile_features(ardelio PUBLIC cxx_std_17)
 
 include(GNUInstallDirs)
 include(FetchContent)
+
+# Fetch SFML
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
     GIT_TAG 3.0.0
@@ -24,6 +26,27 @@ FetchContent_Declare(SFML
     EXCLUDE_FROM_ALL
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
+
+# Fetch ImGui
+FetchContent_Declare(ImGui
+        GIT_REPOSITORY https://github.com/ocornut/imgui
+        GIT_TAG v1.91.1
+        GIT_SHALLOW ON
+        EXCLUDE_FROM_ALL
+        SYSTEM)
+FetchContent_MakeAvailable(ImGui)
+FetchContent_GetProperties(ImGui SOURCE_DIR IMGUI_DIR)
+
+# Fetch ImGui-SFML
+set(IMGUI_SFML_FIND_SFML OFF)
+FetchContent_Declare(ImGui-SFML
+        GIT_REPOSITORY https://github.com/SFML/imgui-sfml
+        GIT_TAG v3.0
+        GIT_SHALLOW ON
+        EXCLUDE_FROM_ALL
+        SYSTEM)
+FetchContent_MakeAvailable(ImGui-SFML)
+
 install(TARGETS ardelio
     EXPORT ArdelioTargets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -31,7 +54,7 @@ install(TARGETS ardelio
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-target_link_libraries(ardelio PRIVATE SFML::Graphics SFML::Audio)
+target_link_libraries(ardelio PUBLIC SFML::Graphics SFML::Audio ImGui-SFML::ImGui-SFML)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
@@ -42,4 +65,4 @@ install(EXPORT ArdelioTargets
 )
 
 add_executable(main src/main.cpp)
-target_link_libraries(main PRIVATE ardelio SFML::Graphics SFML::Audio)
+target_link_libraries(main PUBLIC ardelio SFML::Graphics SFML::Audio ImGui-SFML::ImGui-SFML)
