@@ -1,5 +1,6 @@
 #include "game_object.h"
 #include "setup/game_window.h"
+#include "engine/engine.h"
 
 #include <algorithm>
 
@@ -7,12 +8,15 @@ GameObject::GameObject(const std::string &name)
     : _name(name), _local_position(Vector3::zero), _rotation(0.0f), _parent(nullptr), _children({}) {}
 
 void GameObject::free() {
+    if (get_parent() != nullptr) {
+        get_parent()->remove_child(this);
+    }
     for (GameObject *child : _children) {
         if (child != nullptr) {
             child->free();
-            delete child;
         }
     }
+    delete this;
     _children.clear();
 }
 
@@ -164,3 +168,5 @@ std::vector<Property> GameObject::get_property_list() {
             [this](Variant variant) { this->set_rotation(variant.as_float()); })
     };
 }
+    
+REGISTER_TYPE(GameObject);

@@ -1,4 +1,5 @@
 #include "editor_window.h"
+#include "engine/engine.h"
 
 #include "imgui.h"
 #include "imgui-SFML.h"
@@ -13,7 +14,7 @@
 sf::RenderWindow _window;
 
 EditorWindow::EditorWindow() {
-
+    
 }
 
 EditorWindow::~EditorWindow() {
@@ -27,7 +28,7 @@ void EditorWindow::run() {
     
     auto& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    
+
     _start_new_scene();
     
     sf::Clock deltaClock;
@@ -74,7 +75,9 @@ void EditorWindow::_draw_editor() {
     // Drawing main menu bar
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
-            ImGui::MenuItem("New Scene");
+            if (ImGui::MenuItem("New Scene")) {
+                _start_new_scene();
+            }
             ImGui::MenuItem("Open");
             ImGui::MenuItem("Save");
             ImGui::Separator();
@@ -109,15 +112,25 @@ void EditorWindow::_draw_editor() {
             flags |= ImGuiTreeNodeFlags_Leaf;
         }
         if (ImGui::TreeNodeEx(obj->get_name().c_str(), flags)) {
-            if (ImGui::IsItemClicked()) {
+            if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
                 _selected_game_object = obj;
+            }
+            ImGui::OpenPopupOnItemClick("GameObjectContextMenu", ImGuiPopupFlags_MouseButtonRight);
+            if (ImGui::BeginPopupContextItem("GameObjectContextMenu")) {
+                _selected_game_object = obj;
+                if (ImGui::MenuItem("Add Child")) {
+                    _add_game_object("GameObject", _selected_game_object);
+                }
+                if (obj != _root && ImGui::MenuItem("Delete")) {
+                    _selected_game_object = nullptr;
+                    obj->free();
+                }
+                ImGui::EndPopup();
             }
             for (const auto& child : obj->get_children()) {
                 draw_tree_node(child);
             }
             ImGui::TreePop();
-        } else if (ImGui::IsItemClicked()) {
-            _selected_game_object = obj;
         }
     };
     
@@ -209,6 +222,20 @@ void EditorWindow::_draw_game_object(sf::RenderTarget *target, GameObject *curre
     }
 }
 
+void EditorWindow::_add_game_object(const std::string &type_name, GameObject *parent) {
+    if (parent == nullptr) {
+        return;
+    }
+    auto new_object = Engine::create(type_name);
+    auto children = parent->get_children();
+    for (auto child : parent->get_children()) {
+        if (child->get_name() == new_object->get_name()) {
+            new_object->set_name(new_object->get_name() + std::to_string(children.size()));
+        }
+    }
+    parent->add_child(new_object);
+}
+
 void EditorWindow::_start_new_scene() {
     if (_root != nullptr) {
         _root->free();
@@ -217,5 +244,5 @@ void EditorWindow::_start_new_scene() {
     _root = new GameObject("root");
     auto sprite = new Sprite2D("MySprite", *texture);
     _root->add_child(sprite);
-    _root->set_global_position({640, 480});
+    _root->set_global_position({350, 350});
 }
