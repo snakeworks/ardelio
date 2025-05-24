@@ -48,7 +48,7 @@ public:
     float get_rotation() const;
     void set_rotation(float new_rotation);
 
-    std::vector<Property> get_property_list();
+    virtual std::vector<Property> get_property_list();
 
 private:
     std::string _name;

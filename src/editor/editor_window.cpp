@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+#include <iostream>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -141,15 +142,24 @@ void EditorWindow::_draw_editor() {
     
     // Drawing inspector
     ImGui::Begin("Inspector");
-    ImGui::Text("Selected Object: %s", _selected_game_object == nullptr ? "None" : _selected_game_object->get_name().c_str());
+    std::string current_group_name = "";
     if (_selected_game_object != nullptr) {
         for (const auto &property : _selected_game_object->get_property_list()) {
+            if (current_group_name != property.group_name) {
+                ImGui::Separator();
+                ImGui::Separator();
+                ImGui::SetCursorPosX((ImGui::GetWindowWidth() - ImGui::CalcTextSize(property.group_name.c_str()).x) * 0.5f);
+                ImGui::TextColored(ImVec4(0.9f, 0.9f, 0.9f, 1.0f), "%s", property.group_name.c_str());
+                ImGui::Separator();
+                ImGui::Separator();
+                current_group_name = property.group_name;
+            }
             ImGui::Text("%s", property.name.c_str());
             switch (property.variant_type) {
                 case VariantType::FLOAT: {
-                    float rotation = property.get_function().as_float();
-                    if (ImGui::DragFloat("##", &rotation, 0.01f, 0.0f, 6.28f)) {
-                        property.set_function(Variant(VariantType::FLOAT, &rotation));
+                    float cur_value = property.get_function().as_float();
+                    if (ImGui::DragFloat("##", &cur_value, 0.01f, 0.0f, 6.28f)) {
+                        property.set_function(Variant(VariantType::FLOAT, &cur_value));
                     }
                     break;
                 }
@@ -157,8 +167,27 @@ void EditorWindow::_draw_editor() {
                     auto cur_value = property.get_function().as_vector3();
                     float positions[3] = {cur_value.x, cur_value.y, cur_value.z};
                     if (ImGui::DragFloat3("##", positions)) {
-                        Vector3 new_pos(positions[0], positions[1], positions[2]);
-                        property.set_function(Variant(VariantType::VECTOR3, &new_pos));
+                        Vector3 new_vector(positions[0], positions[1], positions[2]);
+                        property.set_function(Variant(VariantType::VECTOR3, &new_vector));
+                    }
+                    break;
+                }
+                case VariantType::COLOR: {
+                    auto cur_value = property.get_function().as_color();
+                    float color[4] = {
+                        cur_value.r / 255.0f,
+                        cur_value.g / 255.0f,
+                        cur_value.b / 255.0f,
+                        cur_value.a / 255.0f
+                    };
+                    if (ImGui::ColorEdit4("##xx", color)) {
+                        Color new_color(
+                            static_cast<uint8_t>(color[0] * 255.0f), 
+                            static_cast<uint8_t>(color[1] * 255.0f),
+                            static_cast<uint8_t>(color[2] * 255.0f),
+                            static_cast<uint8_t>(color[3] * 255.0f)
+                        );
+                        property.set_function(Variant(VariantType::COLOR, &new_color));
                     }
                     break;
                 }

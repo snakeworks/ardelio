@@ -49,3 +49,15 @@ void Sprite2D::set_modulate(const Color &new_color) {
     _sf_sprite.setColor(_modulate.get_sf_color());
 }
 
+std::vector<Property> Sprite2D::get_property_list() {
+    auto properties = GameObject::get_property_list();
+    std::string group_name = "sprite_2d";
+    properties.push_back(
+        Property("modulate", group_name, VariantType::COLOR, [this]() {
+            Color modulate = this->get_modulate();
+            return Variant(VariantType::COLOR, &modulate);
+        },
+        [this](Variant variant) { this->set_modulate(variant.as_color()); })
+    );
+    return properties;
+}
