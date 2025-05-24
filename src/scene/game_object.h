@@ -2,6 +2,7 @@
 
 #include "math/vector2.h"
 #include "math/vector3.h"
+#include "editor/property.h"
 
 #include <string>
 #include <vector>
@@ -46,6 +47,8 @@ public:
 
     float get_rotation() const;
     void set_rotation(float new_rotation);
+
+    std::vector<Property> get_property_list();
 
 private:
     std::string _name;

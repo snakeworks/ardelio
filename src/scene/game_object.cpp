@@ -148,3 +148,18 @@ void GameObject::set_rotation(float new_rotation) {
     }
 }
 
+std::vector<Property> GameObject::get_property_list() {
+    return {
+        Property("global_position", VariantType::VECTOR3, [this]() { 
+            Vector3 global_position = this->get_global_position();
+            return Variant(VariantType::VECTOR3, &global_position);
+        }, [this](Variant variant) { this->set_global_position(variant.as_vector3()); }),
+        
+        Property("rotation", VariantType::FLOAT,
+            [this]() {
+                float rotation = this->get_rotation();
+                return Variant(VariantType::FLOAT, &rotation); 
+            },
+            [this](Variant variant) { this->set_rotation(variant.as_float()); })
+    };
+}

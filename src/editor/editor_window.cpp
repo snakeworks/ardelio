@@ -100,12 +100,23 @@ void EditorWindow::_draw_editor() {
     // Drawing scene tree
     ImGui::Begin("Scene Tree");
     std::function<void(GameObject*)> draw_tree_node = [&](GameObject* obj) {
-        ImGuiTreeNodeFlags flags = obj->get_children().empty() ? ImGuiTreeNodeFlags_Leaf : 0;
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+        if (obj == _selected_game_object) {
+            flags |= ImGuiTreeNodeFlags_Selected;
+        }
+        if (obj->get_children().empty()) {
+            flags |= ImGuiTreeNodeFlags_Leaf;
+        }
         if (ImGui::TreeNodeEx(obj->get_name().c_str(), flags)) {
+            if (ImGui::IsItemClicked()) {
+                _selected_game_object = obj;
+            }
             for (const auto& child : obj->get_children()) {
                 draw_tree_node(child);
             }
             ImGui::TreePop();
+        } else if (ImGui::IsItemClicked()) {
+            _selected_game_object = obj;
         }
     };
     
@@ -130,15 +141,30 @@ void EditorWindow::_draw_editor() {
     
     // Drawing inspector
     ImGui::Begin("Inspector");
-    ImGui::Text("Selected Object: Player");
-    ImGui::Separator();
-    ImGui::Text("Transform");
-    ImGui::InputFloat3("Position", new float[3]{0, 0, 0});
-    ImGui::InputFloat3("Rotation", new float[3]{0, 0, 0});
-    ImGui::InputFloat3("Scale", new float[3]{1, 1, 1});
-    ImGui::Separator();
-    ImGui::Text("Sprite Renderer");
-    ImGui::InputText("Texture", (char*)"Player.png", 64);
+    ImGui::Text("Selected Object: %s", _selected_game_object == nullptr ? "None" : _selected_game_object->get_name().c_str());
+    if (_selected_game_object != nullptr) {
+        for (const auto &property : _selected_game_object->get_property_list()) {
+            ImGui::Text("%s", property.name.c_str());
+            switch (property.variant_type) {
+                case VariantType::FLOAT: {
+                    float rotation = property.get_function().as_float();
+                    if (ImGui::DragFloat("##", &rotation, 0.01f, 0.0f, 6.28f)) {
+                        property.set_function(Variant(VariantType::FLOAT, &rotation));
+                    }
+                    break;
+                }
+                case VariantType::VECTOR3: {
+                    auto cur_value = property.get_function().as_vector3();
+                    float positions[3] = {cur_value.x, cur_value.y, cur_value.z};
+                    if (ImGui::DragFloat3("##", positions)) {
+                        Vector3 new_pos(positions[0], positions[1], positions[2]);
+                        property.set_function(Variant(VariantType::VECTOR3, &new_pos));
+                    }
+                    break;
+                }
+            }
+        }
+    }
     ImGui::End();
 }
 

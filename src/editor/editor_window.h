@@ -10,6 +10,7 @@ public:
     void run();
 private:
     GameObject *_root;
+    GameObject *_selected_game_object;
     
     void _draw_editor();
     void _draw_game_object(sf::RenderTarget *target, GameObject *current);
