@@ -9,11 +9,11 @@ Sprite2D::Sprite2D(const std::string &name, Texture &texture)
         set_size({sf_tex_size.x, sf_tex_size.y});
 }
 
-void Sprite2D::render(sf::RenderWindow *window) {
+void Sprite2D::render(sf::RenderTarget *target) {
     auto global_pos = get_global_position();
     _sf_sprite.setPosition({global_pos.x, global_pos.y});
     _sf_sprite.setRotation(sf::radians(get_rotation()));
-    window->draw(_sf_sprite);
+    target->draw(_sf_sprite);
 }
 
 const Vector2U &Sprite2D::get_size() const {

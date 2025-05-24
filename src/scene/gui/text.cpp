@@ -5,9 +5,9 @@ Text::Text(const std::string &name, const std::string &text, const Font *font)
     set_text(text);
 }
 
-void Text::render(sf::RenderWindow *window) {
+void Text::render(sf::RenderTarget *target) {
     _sf_text.setFillColor(get_modulate().get_sf_color());
-    window->draw(_sf_text);
+    target->draw(_sf_text);
 }
 
 std::string Text::get_text() const {

@@ -16,7 +16,7 @@ public:
     GameObject(const std::string &name);
     void free();
     
-    virtual void render(sf::RenderWindow *window);
+    virtual void render(sf::RenderTarget *target);
     virtual void update(float delta);
     virtual void physics_update(float delta);
 

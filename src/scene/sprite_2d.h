@@ -11,7 +11,7 @@
 class Sprite2D : public GameObject {
 public:
     Sprite2D(const std::string &name, Texture &texture);
-    void render(sf::RenderWindow *window) override;
+    void render(sf::RenderTarget *target) override;
 
     const Vector2U &get_size() const;
     void set_size(const Vector2U &new_size);

@@ -9,13 +9,14 @@ GameObject::GameObject(const std::string &name)
 void GameObject::free() {
     for (GameObject *child : _children) {
         if (child != nullptr) {
+            child->free();
             delete child;
         }
     }
     _children.clear();
 }
 
-void GameObject::render(sf::RenderWindow *window) {}
+void GameObject::render(sf::RenderTarget *target) {}
 void GameObject::update(float delta) {}
 void GameObject::physics_update(float delta) {}
 
