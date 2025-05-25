@@ -13,11 +13,12 @@
 
 sf::RenderWindow _window;
 
-EditorWindow::EditorWindow() 
-    : _current_popup(EditorWindowPopupType::NONE) {}
+EditorWindow::EditorWindow() : _current_popup(EditorWindowPopupType::NONE) {
+    Engine::register_engine_types();
+}
 
 EditorWindow::~EditorWindow() {
-    
+
 }
 
 void EditorWindow::run() {
@@ -278,7 +279,4 @@ void EditorWindow::_start_new_scene() {
         _root->free();
     }
     _root = new GameObject("root");
-    auto sprite = new Sprite2D("MySprite");
-    _root->add_child(sprite);
-    _root->set_global_position({350, 350});
 }

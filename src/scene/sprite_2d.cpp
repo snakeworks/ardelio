@@ -1,5 +1,4 @@
 #include "sprite_2d.h"
-#include "engine/engine.h"
 
 Texture *Sprite2D::_default_texture = new Texture("assets/white64x64.png");
 
@@ -64,5 +63,3 @@ std::vector<Property> Sprite2D::get_property_list() {
     );
     return properties;
 }
-
-REGISTER_TYPE(Sprite2D);

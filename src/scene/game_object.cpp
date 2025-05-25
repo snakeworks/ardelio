@@ -1,6 +1,5 @@
 #include "game_object.h"
 #include "setup/game_window.h"
-#include "engine/engine.h"
 
 #include <algorithm>
 
@@ -168,5 +167,3 @@ std::vector<Property> GameObject::get_property_list() {
             [this](Variant variant) { this->set_rotation(variant.as_float()); })
     };
 }
-    
-REGISTER_TYPE(GameObject);

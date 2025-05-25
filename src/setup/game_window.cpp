@@ -1,5 +1,6 @@
 #include "game_window.h"
 #include "input/input.h"
+#include "engine/engine.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -8,6 +9,7 @@ std::vector<GameWindow*> GameWindow::_windows = {};
 GameWindow::GameWindow(const Vector2U &resolution, const std::string &title, GameObject *initial_root)
     : _resolution(resolution), _title(title), _root(initial_root) {
     _windows.push_back(this);
+    Engine::register_engine_types();
 }
 
 GameWindow::~GameWindow() {
