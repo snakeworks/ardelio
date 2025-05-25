@@ -171,16 +171,25 @@ void EditorWindow::_draw_editor() {
             switch (property.get_function().get_type()) {
                 case VariantType::FLOAT: {
                     float cur_value = property.get_function().as_float();
-                    if (ImGui::DragFloat("##", &cur_value, 0.01f, 0.0f, 6.28f)) {
+                    if (ImGui::DragFloat(("##" + property.name).c_str(), &cur_value, 0.01f, 0.0f, 6.28f)) {
                         property.set_function(Variant(VariantType::FLOAT, &cur_value));
+                    }
+                    break;
+                }
+                case VariantType::VECTOR2: {
+                    auto cur_value = property.get_function().as_vector2();
+                    float floats[2] = {cur_value.x, cur_value.y};
+                    if (ImGui::DragFloat2(("##" + property.name).c_str(), floats)) {
+                        Vector2 new_vector(floats[0], floats[1]);
+                        property.set_function(Variant(VariantType::VECTOR2, &new_vector));
                     }
                     break;
                 }
                 case VariantType::VECTOR3: {
                     auto cur_value = property.get_function().as_vector3();
-                    float positions[3] = {cur_value.x, cur_value.y, cur_value.z};
-                    if (ImGui::DragFloat3("##", positions)) {
-                        Vector3 new_vector(positions[0], positions[1], positions[2]);
+                    float floats[3] = {cur_value.x, cur_value.y, cur_value.z};
+                    if (ImGui::DragFloat3(("##" + property.name).c_str(), floats)) {
+                        Vector3 new_vector(floats[0], floats[1], floats[2]);
                         property.set_function(Variant(VariantType::VECTOR3, &new_vector));
                     }
                     break;
@@ -193,7 +202,7 @@ void EditorWindow::_draw_editor() {
                         cur_value.b / 255.0f,
                         cur_value.a / 255.0f
                     };
-                    if (ImGui::ColorEdit4("##xx", color)) {
+                    if (ImGui::ColorEdit4(("##" + property.name).c_str(), color)) {
                         Color new_color(
                             static_cast<uint8_t>(color[0] * 255.0f), 
                             static_cast<uint8_t>(color[1] * 255.0f),

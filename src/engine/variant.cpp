@@ -16,6 +16,13 @@ float Variant::as_float() {
     return *static_cast<float*>(_value);
 }
 
+Vector2 Variant::as_vector2() {
+    if (_type != VariantType::VECTOR2) {
+        throw "Variant is not a Vector2.";
+    }
+    return *static_cast<Vector2*>(_value);
+}
+
 Vector3 Variant::as_vector3() {
     if (_type != VariantType::VECTOR3) {
         throw "Variant is not a Vector3.";

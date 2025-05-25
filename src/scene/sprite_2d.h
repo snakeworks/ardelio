@@ -2,7 +2,7 @@
 
 #include "game_object.h"
 #include "math/color.h"
-#include "math/vector2u.h"
+#include "math/vector2.h"
 #include "resources/texture.h"
 
 #include <string>
@@ -13,8 +13,8 @@ public:
     Sprite2D(const std::string &name);
     void render(sf::RenderTarget *target) override;
 
-    const Vector2U &get_size() const;
-    void set_size(const Vector2U &new_size);
+    const Vector2 &get_size() const;
+    void set_size(const Vector2 &new_size);
     
     const Texture *get_texture() const;
     void set_texture(Texture *new_texture);
@@ -27,6 +27,6 @@ private:
     static Texture *_default_texture;
     Texture *_texture;
     Color _modulate;
-    Vector2U _size;
+    Vector2 _size;
     sf::Sprite _sf_sprite;
 };

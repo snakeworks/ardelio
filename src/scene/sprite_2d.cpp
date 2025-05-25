@@ -8,7 +8,10 @@ Sprite2D::Sprite2D(const std::string &name)
     _sf_sprite(_texture->get_sf_texture()),
     _modulate(Color::white) {
         auto sf_tex_size = _texture->get_sf_texture().getSize();
-        set_size({sf_tex_size.x, sf_tex_size.y});
+        set_size({
+            static_cast<float>(sf_tex_size.x),
+            static_cast<float>(sf_tex_size.y)
+        });
 }
 
 void Sprite2D::render(sf::RenderTarget *target) {
@@ -18,11 +21,11 @@ void Sprite2D::render(sf::RenderTarget *target) {
     target->draw(_sf_sprite);
 }
 
-const Vector2U &Sprite2D::get_size() const {
+const Vector2 &Sprite2D::get_size() const {
     return _size;
 }
 
-void Sprite2D::set_size(const Vector2U &new_size) {
+void Sprite2D::set_size(const Vector2 &new_size) {
     _size = new_size;
     auto base_size = _texture->get_sf_texture().getSize();
     _sf_sprite.setScale({
@@ -61,6 +64,14 @@ std::vector<Property> Sprite2D::get_property_list() {
                 return Variant(VariantType::COLOR, &modulate);
             },
             [this](Variant variant) { this->set_modulate(variant.as_color()); })
+    );
+    properties.push_back(
+        Property("size", group_name,
+            [this]() {
+                Vector2 size = this->get_size();
+                return Variant(VariantType::VECTOR2, &size);
+            },
+            [this](Variant variant) { this->set_size(variant.as_vector2()); })
     );
     return properties;
 }
