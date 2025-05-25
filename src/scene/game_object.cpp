@@ -180,7 +180,7 @@ std::vector<Property> GameObject::get_property_list() {
                 return Variant(VariantType::VECTOR3, &local_position);
             }, [this](Variant variant) { this->set_local_position(variant.as_vector3()); }),
         
-        Property("rotation", group_name,
+        Property("local_rotation", group_name,
             [this]() {
                 float rotation = this->get_local_rotation();
                 return Variant(VariantType::FLOAT, &rotation); 

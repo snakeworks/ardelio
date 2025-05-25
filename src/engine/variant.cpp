@@ -36,3 +36,30 @@ Color Variant::as_color() {
     }
     return *static_cast<Color*>(_value);
 }
+
+const std::string Variant::to_serializable_string() {
+    switch (get_type()) {
+        case VariantType::FLOAT: {
+            return std::to_string(as_float());
+        }
+        case VariantType::VECTOR2: {
+            auto vector = as_vector2();
+            return "Vector2(" + std::to_string(vector.x) + "," + 
+                    std::to_string(vector.y) + ")";
+        }
+        case VariantType::VECTOR3: {
+            auto vector = as_vector3();
+            return "Vector3(" + std::to_string(vector.x) + "," +
+                   std::to_string(vector.y) + "," +
+                   std::to_string(vector.z) + ")";
+        }
+        case VariantType::COLOR: {
+            auto color = as_color();
+            return "Color(" + std::to_string(color.r) + "," +
+                   std::to_string(color.g) + "," +
+                   std::to_string(color.b) + "," +
+                   std::to_string(color.a) + ")";
+        }
+    }
+    return "unknown";
+}

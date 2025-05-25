@@ -21,6 +21,8 @@ public:
     Vector2 as_vector2();
     Vector3 as_vector3();
     Color as_color();
+
+    const std::string to_serializable_string();
 private:
     void *_value;
     VariantType _type;
