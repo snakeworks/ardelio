@@ -174,12 +174,13 @@ void GameObject::set_local_rotation(float new_rotation) {
 std::vector<Property> GameObject::get_property_list() {
     std::string group_name = "game_object";
     return {
-        Property("local_position", group_name, VariantType::VECTOR3, [this]() { 
-            Vector3 local_position = this->get_local_position();
-            return Variant(VariantType::VECTOR3, &local_position);
-        }, [this](Variant variant) { this->set_local_position(variant.as_vector3()); }),
+        Property("local_position", group_name,
+            [this]() { 
+                Vector3 local_position = this->get_local_position();
+                return Variant(VariantType::VECTOR3, &local_position);
+            }, [this](Variant variant) { this->set_local_position(variant.as_vector3()); }),
         
-        Property("rotation", group_name, VariantType::FLOAT,
+        Property("rotation", group_name,
             [this]() {
                 float rotation = this->get_local_rotation();
                 return Variant(VariantType::FLOAT, &rotation); 

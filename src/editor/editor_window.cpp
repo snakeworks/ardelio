@@ -168,7 +168,7 @@ void EditorWindow::_draw_editor() {
                 current_group_name = property.group_name;
             }
             ImGui::Text("%s", property.name.c_str());
-            switch (property.variant_type) {
+            switch (property.get_function().get_type()) {
                 case VariantType::FLOAT: {
                     float cur_value = property.get_function().as_float();
                     if (ImGui::DragFloat("##", &cur_value, 0.01f, 0.0f, 6.28f)) {
