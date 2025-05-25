@@ -101,6 +101,10 @@ void EditorWindow::_draw_editor() {
             ImGui::MenuItem("Build");
             ImGui::EndMenu();
         }
+        float windowWidth = ImGui::GetWindowWidth();
+        float textWidth = ImGui::CalcTextSize("Ardelio Alpha 38").x;
+        ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+        ImGui::Text("Ardelio %s", Engine::get_version().c_str());
         ImGui::EndMainMenuBar();
     }
 
@@ -220,7 +224,7 @@ void EditorWindow::_draw_editor() {
         }
     }
     ImGui::End();
-    
+
     // Popups
     switch (_current_popup) {
         case EditorWindowPopupType::NONE: {

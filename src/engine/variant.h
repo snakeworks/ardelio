@@ -6,7 +6,7 @@
 #include <any>
 
 enum VariantType {
-    NIL,
+    NIL, // Had to call it nil because null and NULL are already reserved
     FLOAT,
     VECTOR2,
     VECTOR3,

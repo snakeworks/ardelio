@@ -3,6 +3,10 @@
 
 std::unordered_map<std::string, Engine::instance_creator> Engine::_creators = {};
 
+const std::string Engine::get_version() {
+    return "v0.38";
+}
+
 void Engine::register_type(const std::string &type_name, instance_creator creator) {
     _creators[type_name] = creator;
 }

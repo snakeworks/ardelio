@@ -10,6 +10,8 @@
 
 class Engine {
 public:
+    static const std::string get_version();
+
     using instance_creator = std::function<GameObject*()>;
     static void register_type(const std::string &type_name, instance_creator creator);
     static void register_engine_types();
