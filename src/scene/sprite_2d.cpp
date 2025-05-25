@@ -14,7 +14,7 @@ Sprite2D::Sprite2D(const std::string &name)
 void Sprite2D::render(sf::RenderTarget *target) {
     auto global_pos = get_global_position();
     _sf_sprite.setPosition({global_pos.x, global_pos.y});
-    _sf_sprite.setRotation(sf::radians(get_rotation()));
+    _sf_sprite.setRotation(sf::radians(get_global_rotation()));
     target->draw(_sf_sprite);
 }
 

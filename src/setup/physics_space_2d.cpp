@@ -282,7 +282,7 @@ void PhysicsSpace2D::physics_update(float delta) {
         // Angular
         float angular_acc = o->get_theta_dot_dot() + o->get_itheta_dot_dot() / o->get_intertia();
         o->set_theta_dot(o->get_theta_dot() + angular_acc * delta);
-        o->set_rotation(o->get_rotation() + o->get_theta_dot() * delta);
+        o->set_global_rotation(o->get_global_rotation() + o->get_theta_dot() * delta);
 
         o->set_itheta_dot_dot(0.0f);
         o->set_theta_dot_dot(0.0f);

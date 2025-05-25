@@ -45,8 +45,10 @@ public:
     void set_global_position(const Vector3 &new_position);
     void set_global_position_2d(const Vector2 &new_position);
 
-    float get_rotation() const;
-    void set_rotation(float new_rotation);
+    float get_global_rotation() const;
+    void set_global_rotation(float new_rotation);
+    float get_local_rotation() const;
+    void set_local_rotation(float new_rotation);
 
     virtual std::vector<Property> get_property_list();
 
@@ -54,7 +56,7 @@ private:
     std::string _name;
     GameWindow *_window;
     Vector3 _local_position;
-    float _rotation;
+    float _local_rotation;
     GameObject *_parent;
     std::vector<GameObject*> _children;
 };

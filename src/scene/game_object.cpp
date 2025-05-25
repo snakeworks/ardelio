@@ -4,7 +4,7 @@
 #include <algorithm>
 
 GameObject::GameObject(const std::string &name)
-    : _name(name), _local_position(Vector3::zero), _rotation(0.0f), _parent(nullptr), _children({}) {}
+    : _name(name), _local_position(Vector3::zero), _local_rotation(0.0f), _parent(nullptr), _children({}) {}
 
 void GameObject::free() {
     if (get_parent() != nullptr) {
@@ -138,15 +138,35 @@ void GameObject::set_global_position_2d(const Vector2 &new_position) {
     set_global_position({new_position.x, new_position.y, get_global_position().z});
 }
 
-float GameObject::get_rotation() const {
-    return _rotation;
+float GameObject::get_global_rotation() const {
+    if (_parent) {
+        return _parent->get_global_rotation() + _local_rotation;
+    }
+    return _local_rotation;
 }
 
-void GameObject::set_rotation(float new_rotation) {
-    _rotation = new_rotation;
+void GameObject::set_global_rotation(float new_rotation) {
+    if (_parent) {
+        _local_rotation = new_rotation - _parent->get_global_rotation();
+    } else {
+        _local_rotation = new_rotation;
+    }
     for (GameObject *child : _children) {
         if (child) {
-            child->set_rotation(new_rotation);
+            child->set_global_rotation(new_rotation + child->get_local_rotation());
+        }
+    }
+}
+
+float GameObject::get_local_rotation() const {
+    return _local_rotation;
+}
+
+void GameObject::set_local_rotation(float new_rotation) {
+    _local_rotation = new_rotation;
+    for (GameObject *child : _children) {
+        if (child) {
+            child->set_global_rotation(get_global_rotation() + child->get_local_rotation());
         }
     }
 }
@@ -161,9 +181,9 @@ std::vector<Property> GameObject::get_property_list() {
         
         Property("rotation", group_name, VariantType::FLOAT,
             [this]() {
-                float rotation = this->get_rotation();
+                float rotation = this->get_local_rotation();
                 return Variant(VariantType::FLOAT, &rotation); 
             },
-            [this](Variant variant) { this->set_rotation(variant.as_float()); })
+            [this](Variant variant) { this->set_local_rotation(variant.as_float()); })
     };
 }
