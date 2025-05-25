@@ -50,8 +50,12 @@ public:
     float get_local_rotation() const;
     void set_local_rotation(float new_rotation);
 
-    virtual std::vector<Property> get_property_list();
+    std::vector<Property> get_property_list();
 
+    void set_property(const std::string &name, Variant value);
+    Variant get_property(const std::string &name);
+protected:
+    std::vector<Property> _property_list;
 private:
     std::string _name;
     GameWindow *_window;

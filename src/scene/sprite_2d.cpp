@@ -12,6 +12,24 @@ Sprite2D::Sprite2D(const std::string &name)
             static_cast<float>(sf_tex_size.x),
             static_cast<float>(sf_tex_size.y)
         });
+
+        std::string group_name = "sprite_2d";
+        _property_list.push_back(
+            Property("modulate", group_name,
+                [this]() {
+                    Color modulate = this->get_modulate();
+                    return Variant(VariantType::COLOR, &modulate);
+                },
+                [this](Variant variant) { this->set_modulate(variant.as_color()); })
+        );
+        _property_list.push_back(
+            Property("size", group_name,
+                [this]() {
+                    Vector2 size = this->get_size();
+                    return Variant(VariantType::VECTOR2, &size);
+                },
+                [this](Variant variant) { this->set_size(variant.as_vector2()); })
+        );
 }
 
 void Sprite2D::render(sf::RenderTarget *target) {
@@ -52,26 +70,4 @@ const Color &Sprite2D::get_modulate() const {
 void Sprite2D::set_modulate(const Color &new_color) {
     _modulate = new_color;
     _sf_sprite.setColor(_modulate.get_sf_color());
-}
-
-std::vector<Property> Sprite2D::get_property_list() {
-    auto properties = GameObject::get_property_list();
-    std::string group_name = "sprite_2d";
-    properties.push_back(
-        Property("modulate", group_name,
-            [this]() {
-                Color modulate = this->get_modulate();
-                return Variant(VariantType::COLOR, &modulate);
-            },
-            [this](Variant variant) { this->set_modulate(variant.as_color()); })
-    );
-    properties.push_back(
-        Property("size", group_name,
-            [this]() {
-                Vector2 size = this->get_size();
-                return Variant(VariantType::VECTOR2, &size);
-            },
-            [this](Variant variant) { this->set_size(variant.as_vector2()); })
-    );
-    return properties;
 }

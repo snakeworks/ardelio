@@ -6,6 +6,7 @@
 #include <any>
 
 enum VariantType {
+    NIL,
     FLOAT,
     VECTOR2,
     VECTOR3,
@@ -22,7 +23,10 @@ public:
     Vector3 as_vector3();
     Color as_color();
 
-    const std::string to_serializable_string();
+    const std::string to_string();
+    const static Variant from_string(const std::string &string);
+
+    const static Variant nil;
 private:
     void *_value;
     VariantType _type;

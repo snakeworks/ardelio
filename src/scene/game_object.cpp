@@ -4,7 +4,27 @@
 #include <algorithm>
 
 GameObject::GameObject(const std::string &name)
-    : _name(name), _local_position(Vector3::zero), _local_rotation(0.0f), _parent(nullptr), _children({}) {}
+    : _name(name), 
+    _local_position(Vector3::zero), 
+    _local_rotation(0.0f), 
+    _parent(nullptr), 
+    _children({}),
+    _property_list({}) {
+        const std::string group_name = "game_object";
+        _property_list.push_back(Property("local_position", group_name,
+            [this]() { 
+                Vector3 local_position = this->get_local_position();
+                return Variant(VariantType::VECTOR3, &local_position);
+            }, [this](Variant variant) { this->set_local_position(variant.as_vector3()); })
+        );
+        _property_list.push_back(Property("local_rotation", group_name,
+            [this]() {
+                float rotation = this->get_local_rotation();
+                return Variant(VariantType::FLOAT, &rotation); 
+            },
+            [this](Variant variant) { this->set_local_rotation(variant.as_float()); })
+        );
+}
 
 void GameObject::free() {
     if (get_parent() != nullptr) {
@@ -172,19 +192,23 @@ void GameObject::set_local_rotation(float new_rotation) {
 }
 
 std::vector<Property> GameObject::get_property_list() {
-    std::string group_name = "game_object";
-    return {
-        Property("local_position", group_name,
-            [this]() { 
-                Vector3 local_position = this->get_local_position();
-                return Variant(VariantType::VECTOR3, &local_position);
-            }, [this](Variant variant) { this->set_local_position(variant.as_vector3()); }),
-        
-        Property("local_rotation", group_name,
-            [this]() {
-                float rotation = this->get_local_rotation();
-                return Variant(VariantType::FLOAT, &rotation); 
-            },
-            [this](Variant variant) { this->set_local_rotation(variant.as_float()); })
-    };
+    return _property_list;
+}
+
+void GameObject::set_property(const std::string &name, Variant value) {
+    for (auto property : _property_list) {
+        if (property.name == name) {
+            property.set_function(value);
+            return;
+        }
+    }
+}
+
+Variant GameObject::get_property(const std::string &name) {
+    for (auto property : _property_list) {
+        if (property.name == name) {
+            return property.get_function();
+        }
+    }
+    return Variant::nil;
 }

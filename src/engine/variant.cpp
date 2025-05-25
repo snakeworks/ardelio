@@ -1,13 +1,13 @@
 #include "variant.h"
 
-#include <iostream>
-
 Variant::Variant(const VariantType type, void *value) 
     : _type(type), _value(value) {}
 
 VariantType Variant::get_type() {
     return _type;
 }
+
+const Variant Variant::nil = Variant(VariantType::NIL, nullptr);
 
 float Variant::as_float() {
     if (_type != VariantType::FLOAT) {
@@ -32,13 +32,16 @@ Vector3 Variant::as_vector3() {
 
 Color Variant::as_color() {
     if (_type != VariantType::COLOR) {
-        throw "Variant is not a color.";
+        throw "Variant is not a Color.";
     }
     return *static_cast<Color*>(_value);
 }
 
-const std::string Variant::to_serializable_string() {
+const std::string Variant::to_string() {
     switch (get_type()) {
+        case VariantType::NIL: {
+            return "nil";
+        }
         case VariantType::FLOAT: {
             return std::to_string(as_float());
         }
@@ -62,4 +65,46 @@ const std::string Variant::to_serializable_string() {
         }
     }
     return "unknown";
+}
+
+const Variant Variant::from_string(const std::string &string) {
+    if (string.rfind("Vector2(", 0) == 0) {
+        size_t start = string.find('(') + 1;
+        size_t comma = string.find(',', start);
+        size_t end = string.find(')', comma);
+        float x = std::stof(string.substr(start, comma - start));
+        float y = std::stof(string.substr(comma + 1, end - comma - 1));
+        Vector2 *vector = new Vector2{x, y};
+        return Variant(VariantType::VECTOR2, vector);
+    } else if (string.rfind("Vector3(", 0) == 0) {
+        size_t start = string.find('(') + 1;
+        size_t first_comma = string.find(',', start);
+        size_t second_comma = string.find(',', first_comma + 1);
+        size_t end = string.find(')', second_comma);
+        float x = std::stof(string.substr(start, first_comma - start));
+        float y = std::stof(string.substr(first_comma + 1, second_comma - first_comma - 1));
+        float z = std::stof(string.substr(second_comma + 1, end - second_comma - 1));
+        Vector3 *vector = new Vector3{x, y, z};
+        return Variant(VariantType::VECTOR3, vector);
+    } else if (string.rfind("Color(", 0) == 0) {
+        size_t start = string.find('(') + 1;
+        size_t first_comma = string.find(',', start);
+        size_t second_comma = string.find(',', first_comma + 1);
+        size_t third_comma = string.find(',', second_comma + 1);
+        size_t end = string.find(')', third_comma);
+        uint8_t r = static_cast<uint8_t>(std::stoi(string.substr(start, first_comma - start)));
+        uint8_t g = static_cast<uint8_t>(std::stoi(string.substr(first_comma + 1, second_comma - first_comma - 1)));
+        uint8_t b = static_cast<uint8_t>(std::stoi(string.substr(second_comma + 1, third_comma - second_comma - 1)));
+        uint8_t a = static_cast<uint8_t>(std::stoi(string.substr(third_comma + 1, end - third_comma - 1)));
+        Color *color = new Color{r, g, b, a};
+        return Variant(VariantType::COLOR, color);
+    } else {
+        try {
+            float value = std::stof(string);
+            float *float_value = new float(value);
+            return Variant(VariantType::FLOAT, float_value);
+        } catch (...) {
+            throw "Invalid string format for Variant.";
+        }
+    }
 }

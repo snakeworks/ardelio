@@ -16,6 +16,9 @@ public:
 
     static GameObject *create(const std::string &type_name);
     static std::vector<std::string> get_all_type_names();
+
+    static void serialize_scene(GameObject *root, const std::string &file_path);
+    static GameObject *deserialize_scene(const std::string &file_path);
 private:
     static std::unordered_map<std::string, instance_creator> _creators;
 };

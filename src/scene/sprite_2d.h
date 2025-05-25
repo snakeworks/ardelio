@@ -21,8 +21,6 @@ public:
     
     const Color &get_modulate() const;
     void set_modulate(const Color &new_color);
-
-    virtual std::vector<Property> get_property_list() override;
 private:
     static Texture *_default_texture;
     Texture *_texture;

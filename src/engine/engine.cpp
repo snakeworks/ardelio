@@ -27,3 +27,11 @@ std::vector<std::string> Engine::get_all_type_names() {
     }
     return type_names;
 }
+
+void Engine::serialize_scene(GameObject *root, const std::string &file_path) {
+    
+}
+
+GameObject *Engine::deserialize_scene(const std::string &file_path) {
+    return nullptr;
+}
