@@ -117,7 +117,7 @@ void EditorWindow::_draw_editor() {
 
     // Drawing scene tree
     ImGui::Begin("Scene Tree");
-    std::function<void(GameObject*)> draw_tree_node = [&](GameObject* obj) {
+    std::function<void(GameObject*)> draw_tree_node = [&](GameObject *obj) {
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
         if (obj == _selected_game_object) {
             flags |= ImGuiTreeNodeFlags_Selected;
@@ -128,29 +128,40 @@ void EditorWindow::_draw_editor() {
 
         static char rename_buffer[128] = "";
 
-        if (ImGui::TreeNodeEx(obj->get_name().c_str(), flags)) {
-            if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
-                _selected_game_object = obj;
-            }
-            if ((ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) || ImGui::IsKeyPressed(ImGuiKey_F2)) {
-                _selected_game_object = obj;
+        bool node_open = ImGui::TreeNodeEx(obj->get_name().c_str(), flags);
+
+        // Handle selection and renaming
+        if (ImGui::IsItemClicked(ImGuiMouseButton_Left) || ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+            _selected_game_object = obj;
+        }
+
+        if (_selected_game_object == obj) {
+            if ((ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) || ImGui::IsKeyPressed(ImGuiKey_F2)) && _current_popup == EditorWindowPopupType::NONE) {
                 strncpy(rename_buffer, obj->get_name().c_str(), sizeof(rename_buffer));
                 rename_buffer[sizeof(rename_buffer) - 1] = '\0';
                 _current_popup = EditorWindowPopupType::OBJECT_RENAME;
             }
-            ImGui::OpenPopupOnItemClick("GameObjectContextMenu", ImGuiPopupFlags_MouseButtonRight);
-            if (ImGui::BeginPopupContextItem("GameObjectContextMenu")) {
-                _selected_game_object = obj;
-                if (ImGui::MenuItem("Add Child")) {
-                    _current_popup = EditorWindowPopupType::OBJECT_PICKER;
-                }
-                if (obj != _root && ImGui::MenuItem("Delete")) {
-                    _selected_game_object = nullptr;
-                    obj->free();
-                }
-                ImGui::EndPopup();
-                }
-                for (const auto& child : obj->get_children()) {
+            if (ImGui::IsKeyPressed(ImGuiKey_Delete) && obj != _root && _current_popup == EditorWindowPopupType::NONE) {
+                _selected_game_object = nullptr;
+                obj->free();
+            }
+        }
+
+        // Object picker popup menu
+        if (ImGui::BeginPopupContextItem("ObjectPickerPopup")) {
+            _selected_game_object = obj;
+            if (ImGui::MenuItem("Add Child")) {
+                _current_popup = EditorWindowPopupType::OBJECT_PICKER;
+            }
+            if (obj != _root && ImGui::MenuItem("Delete")) {
+                _selected_game_object = nullptr;
+                obj->free();
+            }
+            ImGui::EndPopup();
+        }
+
+        if (node_open) {
+            for (const auto& child : obj->get_children()) {
                 draw_tree_node(child);
             }
             ImGui::TreePop();
