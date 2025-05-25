@@ -125,17 +125,18 @@ void EditorWindow::_draw_editor() {
         if (obj->get_children().empty()) {
             flags |= ImGuiTreeNodeFlags_Leaf;
         }
-        static char buffer[128] = "";
-        static GameObject* renaming_object = nullptr;
+
+        static char rename_buffer[128] = "";
 
         if (ImGui::TreeNodeEx(obj->get_name().c_str(), flags)) {
             if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
                 _selected_game_object = obj;
             }
             if ((ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) || ImGui::IsKeyPressed(ImGuiKey_F2)) {
-                renaming_object = obj;
-                strncpy(buffer, obj->get_name().c_str(), sizeof(buffer));
-                buffer[sizeof(buffer) - 1] = '\0';
+                _selected_game_object = obj;
+                strncpy(rename_buffer, obj->get_name().c_str(), sizeof(rename_buffer));
+                rename_buffer[sizeof(rename_buffer) - 1] = '\0';
+                _current_popup = EditorWindowPopupType::OBJECT_RENAME;
             }
             ImGui::OpenPopupOnItemClick("GameObjectContextMenu", ImGuiPopupFlags_MouseButtonRight);
             if (ImGui::BeginPopupContextItem("GameObjectContextMenu")) {
@@ -155,15 +156,15 @@ void EditorWindow::_draw_editor() {
             ImGui::TreePop();
         }
 
-        if (renaming_object == obj) {
+        if (_current_popup == EditorWindowPopupType::OBJECT_RENAME && _selected_game_object == obj) {
             ImGui::SetNextItemWidth(200);
             ImGui::SetKeyboardFocusHere();
-            if (ImGui::InputText("##Rename", buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
-                obj->set_name(buffer);
-                renaming_object = nullptr;
+            if (ImGui::InputText("##Rename", rename_buffer, sizeof(rename_buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+                _selected_game_object->set_name(rename_buffer);
+                _current_popup = EditorWindowPopupType::NONE;
             }
             if (ImGui::IsItemDeactivated() && !ImGui::IsItemActive()) {
-                renaming_object = nullptr;
+                _current_popup = EditorWindowPopupType::NONE;
             }
         }
     };

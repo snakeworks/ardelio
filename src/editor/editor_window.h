@@ -4,7 +4,8 @@
 
 enum EditorWindowPopupType {
     NONE,
-    OBJECT_PICKER
+    OBJECT_PICKER,
+    OBJECT_RENAME
 };
 
 class EditorWindow {
