@@ -13,3 +13,11 @@ GameObject *Engine::create(const std::string &type_name) {
     }
     return nullptr;
 }
+
+std::vector<std::string> Engine::get_all_type_names() {
+    std::vector<std::string> type_names = {};
+    for (auto element : _creators) {
+        type_names.push_back(element.first);
+    }
+    return type_names;
+}

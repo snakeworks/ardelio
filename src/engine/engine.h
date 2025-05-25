@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <functional>
 #include <memory>
+#include <vector>
 
 class Engine {
 public:
@@ -13,6 +14,7 @@ public:
     static void register_type(const std::string &type_name, instance_creator creator);
     
     static GameObject *create(const std::string &type_name);
+    static std::vector<std::string> get_all_type_names();
 private:
     static std::unordered_map<std::string, instance_creator> _creators;
 };

@@ -13,9 +13,8 @@
 
 sf::RenderWindow _window;
 
-EditorWindow::EditorWindow() {
-    
-}
+EditorWindow::EditorWindow() 
+    : _current_popup(EditorWindowPopupType::NONE) {}
 
 EditorWindow::~EditorWindow() {
     
@@ -119,7 +118,7 @@ void EditorWindow::_draw_editor() {
             if (ImGui::BeginPopupContextItem("GameObjectContextMenu")) {
                 _selected_game_object = obj;
                 if (ImGui::MenuItem("Add Child")) {
-                    _add_game_object("GameObject", _selected_game_object);
+                    _current_popup = EditorWindowPopupType::OBJECT_PICKER;
                 }
                 if (obj != _root && ImGui::MenuItem("Delete")) {
                     _selected_game_object = nullptr;
@@ -208,17 +207,55 @@ void EditorWindow::_draw_editor() {
         }
     }
     ImGui::End();
+    
+    // Popups
+    switch (_current_popup) {
+        case EditorWindowPopupType::NONE: {
+            break;
+        }
+        case EditorWindowPopupType::OBJECT_PICKER: {
+            _draw_object_picker_popup();
+            break;
+        }
+    }
 }
 
 void EditorWindow::_draw_game_object(sf::RenderTarget *target, GameObject *current) {
     if (current == nullptr) {
         return;
     }
-
+    
     current->render(target);
-
+    
     for (const auto &child : current->get_children()) {
         _draw_game_object(target, child);
+    }
+}
+
+void EditorWindow::_draw_object_picker_popup() {
+    ImGui::OpenPopup("Object Picker");
+    
+    if (ImGui::IsPopupOpen("Object Picker") && ImGui::BeginPopup("Object Picker")) {
+        ImGui::Text("Select an object to add:");
+        ImGui::Separator();
+        
+        std::vector<std::string> type_names = Engine::get_all_type_names();
+        
+        for (int i = 0; i < type_names.size(); i++) {
+            if (ImGui::Selectable(type_names[i].c_str())) {
+                _add_game_object(type_names[i], _selected_game_object);
+                _current_popup = EditorWindowPopupType::NONE;
+                ImGui::CloseCurrentPopup();
+            }
+        }
+        ImGui::Separator();
+
+        if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+            _current_popup = EditorWindowPopupType::NONE;
+            ImGui::CloseCurrentPopup();
+        }
+        
+        ImGui::EndPopup();
     }
 }
 
@@ -240,9 +277,8 @@ void EditorWindow::_start_new_scene() {
     if (_root != nullptr) {
         _root->free();
     }
-    auto texture = new Texture("assets/white64x64.png");
     _root = new GameObject("root");
-    auto sprite = new Sprite2D("MySprite", *texture);
+    auto sprite = new Sprite2D("MySprite");
     _root->add_child(sprite);
     _root->set_global_position({350, 350});
 }

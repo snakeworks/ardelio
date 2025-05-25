@@ -1,11 +1,14 @@
 #include "sprite_2d.h"
+#include "engine/engine.h"
 
-Sprite2D::Sprite2D(const std::string &name, Texture &texture) 
-    : GameObject(name), 
-    _texture(texture), 
-    _sf_sprite(_texture.get_sf_texture()), 
+Texture *Sprite2D::_default_texture = new Texture("assets/white64x64.png");
+
+Sprite2D::Sprite2D(const std::string &name) 
+    : GameObject(name),
+    _texture(_default_texture),
+    _sf_sprite(_texture->get_sf_texture()),
     _modulate(Color::white) {
-        auto sf_tex_size = _texture.get_sf_texture().getSize();
+        auto sf_tex_size = _texture->get_sf_texture().getSize();
         set_size({sf_tex_size.x, sf_tex_size.y});
 }
 
@@ -22,7 +25,7 @@ const Vector2U &Sprite2D::get_size() const {
 
 void Sprite2D::set_size(const Vector2U &new_size) {
     _size = new_size;
-    auto base_size = _texture.get_sf_texture().getSize();
+    auto base_size = _texture->get_sf_texture().getSize();
     _sf_sprite.setScale({
         static_cast<float>(_size.x) / static_cast<float>(base_size.x),
         static_cast<float>(_size.y) / static_cast<float>(base_size.y)
@@ -31,13 +34,13 @@ void Sprite2D::set_size(const Vector2U &new_size) {
         _sf_sprite.getLocalBounds().size.y / 2.f});
 }
 
-const Texture &Sprite2D::get_texture() const {
+const Texture *Sprite2D::get_texture() const {
     return _texture;
 }
 
-void Sprite2D::set_texture(const Texture &new_texture) {
+void Sprite2D::set_texture(Texture *new_texture) {
     _texture = new_texture;
-    _sf_sprite.setTexture(_texture.get_sf_texture());
+    _sf_sprite.setTexture(_texture->get_sf_texture());
 }
 
 const Color &Sprite2D::get_modulate() const {
@@ -61,3 +64,5 @@ std::vector<Property> Sprite2D::get_property_list() {
     );
     return properties;
 }
+
+REGISTER_TYPE(Sprite2D);
