@@ -64,4 +64,5 @@ private:
     float _local_rotation;
     GameObject *_parent;
     std::vector<GameObject*> _children;
+    bool _is_freed;
 };

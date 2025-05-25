@@ -24,7 +24,7 @@ public:
     Color as_color();
 
     const std::string to_string();
-    const static Variant from_string(const std::string &string);
+    static Variant from_string(const std::string &string);
 
     const static Variant nil;
 private:

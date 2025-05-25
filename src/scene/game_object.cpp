@@ -10,7 +10,8 @@ GameObject::GameObject(const std::string &name)
     _local_rotation(0.0f), 
     _parent(nullptr), 
     _children({}),
-    _property_list({}) {
+    _property_list({}),
+    _is_freed(false) {
         const std::string group_name = "game_object";
         _property_list.push_back(Property("local_position", group_name,
             [this]() { 
@@ -28,6 +29,10 @@ GameObject::GameObject(const std::string &name)
 }
 
 void GameObject::free() {
+    if (_is_freed) {
+        return;
+    }
+    _is_freed = true;
     if (get_parent() != nullptr) {
         auto p = get_parent()->remove_child(this);
     }

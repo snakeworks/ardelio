@@ -1,8 +1,0 @@
-<Ardelio version="1.0.0"/>
-<Export name="MyReusableScene" color="Color"/>
-<GameObject name="Root">
-    <Sprite2D
-        texture="Texture(assets/white32x32.png)"
-        global_position="Vector2(640, 400)"
-        modulate="{color}"/>
-</GameObject>

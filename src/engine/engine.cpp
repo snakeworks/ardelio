@@ -67,21 +67,19 @@ GameObject *Engine::deserialize_scene(const std::string &file_path) {
         throw std::runtime_error("Failed to open file for deserialization: " + file_path);
     }
 
+    auto trim = [](const std::string &str) -> std::string {
+        size_t first = str.find_first_not_of(' ');
+        size_t last = str.find_last_not_of(' ');
+        return (first == std::string::npos || last == std::string::npos) ? "" : str.substr(first, last - first + 1);
+    };
+
     std::function<GameObject *(std::istream &, int &)> deserialize_object = [&](std::istream &stream, int &current_indent) -> GameObject * {
         std::string line;
-        std::getline(stream, line);
-        if (line.empty()) return nullptr;
+        if (!std::getline(stream, line) || line.empty()) return nullptr;
 
-        int indent = 0;
-        while (indent < line.size() && line[indent] == ' ') {
-            ++indent;
-        }
-        indent /= 2;
-
+        int indent = static_cast<int>(line.find_first_not_of(' ')) / 2;
         if (indent < current_indent) {
-            if (stream.tellg() >= static_cast<std::streampos>(line.size() + 1)) {
-                stream.seekg(-static_cast<std::streamoff>(line.size() + 1), std::ios::cur); // Rewind to the start of the line
-            }
+            stream.seekg(-static_cast<std::streamoff>(line.size() + 1), std::ios::cur); // Rewind to the start of the line
             return nullptr;
         }
 
@@ -89,12 +87,11 @@ GameObject *Engine::deserialize_scene(const std::string &file_path) {
 
         std::string name, type;
         if (line.find("- name: ") != std::string::npos) {
-            name = line.substr(line.find(": ") + 2);
+            name = trim(line.substr(line.find(": ") + 2));
         }
 
-        std::getline(stream, line);
-        if (line.find("type: ") != std::string::npos) {
-            type = line.substr(line.find(": ") + 2);
+        if (std::getline(stream, line) && line.find("type: ") != std::string::npos) {
+            type = trim(line.substr(line.find(": ") + 2));
         }
 
         GameObject *object = Engine::create(type);
@@ -102,18 +99,17 @@ GameObject *Engine::deserialize_scene(const std::string &file_path) {
             throw std::runtime_error("Unknown type during deserialization: " + type);
         }
         object->set_name(name);
+
         while (std::getline(stream, line)) {
-            if (line.empty() || stream.eof()) {
-                break;
-            }
-            if (line.find("children:") != std::string::npos) {
+            if (line.empty() || line.find("children:") != std::string::npos) {
                 break;
             }
 
             size_t colon_pos = line.find(": ");
             if (colon_pos != std::string::npos) {
-                std::string property_name = line.substr(line.find_first_not_of(' '), colon_pos - line.find_first_not_of(' '));
-                std::string property_value = line.substr(colon_pos + 2);
+                std::string property_name = trim(line.substr(0, colon_pos));
+                std::string property_value = trim(line.substr(colon_pos + 2));
+
                 Variant variant = Variant::from_string(property_value);
                 object->set_property(property_name, variant);
             }
@@ -131,6 +127,17 @@ GameObject *Engine::deserialize_scene(const std::string &file_path) {
 
     int current_indent = -1;
     GameObject *root = deserialize_object(file, current_indent);
+
+    std::function<void(GameObject*)> validate_object = [&](GameObject *obj) {
+        if (!obj) {
+            throw std::runtime_error("Deserialized object is null.");
+        }
+        for (auto *child : obj->get_children()) {
+            validate_object(child);
+        }
+    };
+    validate_object(root);
+
     file.close();
     return root;
 }

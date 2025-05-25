@@ -67,7 +67,7 @@ const std::string Variant::to_string() {
     return "unknown";
 }
 
-const Variant Variant::from_string(const std::string &string) {
+Variant Variant::from_string(const std::string &string) {
     if (string.rfind("Vector2(", 0) == 0) {
         size_t start = string.find('(') + 1;
         size_t comma = string.find(',', start);
