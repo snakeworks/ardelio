@@ -118,16 +118,24 @@ void EditorWindow::_draw_editor() {
     // Drawing scene tree
     ImGui::Begin("Scene Tree");
     std::function<void(GameObject*)> draw_tree_node = [&](GameObject* obj) {
-        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
         if (obj == _selected_game_object) {
             flags |= ImGuiTreeNodeFlags_Selected;
         }
         if (obj->get_children().empty()) {
             flags |= ImGuiTreeNodeFlags_Leaf;
         }
+        static char buffer[128] = "";
+        static GameObject* renaming_object = nullptr;
+
         if (ImGui::TreeNodeEx(obj->get_name().c_str(), flags)) {
             if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
                 _selected_game_object = obj;
+            }
+            if ((ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) || ImGui::IsKeyPressed(ImGuiKey_F2)) {
+                renaming_object = obj;
+                strncpy(buffer, obj->get_name().c_str(), sizeof(buffer));
+                buffer[sizeof(buffer) - 1] = '\0';
             }
             ImGui::OpenPopupOnItemClick("GameObjectContextMenu", ImGuiPopupFlags_MouseButtonRight);
             if (ImGui::BeginPopupContextItem("GameObjectContextMenu")) {
@@ -140,11 +148,23 @@ void EditorWindow::_draw_editor() {
                     obj->free();
                 }
                 ImGui::EndPopup();
-            }
-            for (const auto& child : obj->get_children()) {
+                }
+                for (const auto& child : obj->get_children()) {
                 draw_tree_node(child);
             }
             ImGui::TreePop();
+        }
+
+        if (renaming_object == obj) {
+            ImGui::SetNextItemWidth(200);
+            ImGui::SetKeyboardFocusHere();
+            if (ImGui::InputText("##Rename", buffer, sizeof(buffer), ImGuiInputTextFlags_EnterReturnsTrue)) {
+                obj->set_name(buffer);
+                renaming_object = nullptr;
+            }
+            if (ImGui::IsItemDeactivated() && !ImGui::IsItemActive()) {
+                renaming_object = nullptr;
+            }
         }
     };
     
