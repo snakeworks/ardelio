@@ -8,15 +8,15 @@ GameObject::GameObject(const std::string &name)
 
 void GameObject::free() {
     if (get_parent() != nullptr) {
-        get_parent()->remove_child(this);
+        auto p = get_parent()->remove_child(this);
     }
     for (GameObject *child : _children) {
         if (child != nullptr) {
             child->free();
         }
     }
-    delete this;
     _children.clear();
+    delete this;
 }
 
 void GameObject::render(sf::RenderTarget *target) {}

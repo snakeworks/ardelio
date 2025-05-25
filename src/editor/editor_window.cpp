@@ -76,7 +76,10 @@ void EditorWindow::_draw_editor() {
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
             if (ImGui::MenuItem("New Scene")) {
+                ImGui::EndMenu();
+                ImGui::EndMainMenuBar();
                 _start_new_scene();
+                return;
             }
             ImGui::MenuItem("Open");
             ImGui::MenuItem("Save");
@@ -286,6 +289,8 @@ void EditorWindow::_add_game_object(const std::string &type_name, GameObject *pa
 void EditorWindow::_start_new_scene() {
     if (_root != nullptr) {
         _root->free();
+        _selected_game_object = nullptr;
+        _root = nullptr;
     }
     _root = new GameObject("root");
 }
