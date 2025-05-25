@@ -54,7 +54,7 @@ void EditorWindow::run() {
         ImGui::Begin("Viewport");
         static ImVec2 viewportSize{500, 500};
         sf::RenderTexture viewportTexture({static_cast<uint32_t>(viewportSize.x), static_cast<uint32_t>(viewportSize.y)});
-        viewportTexture.clear(sf::Color::Black);
+        viewportTexture.clear({48, 48, 48});
         viewportSize = ImGui::GetContentRegionAvail();
         ImGui::Image(viewportTexture);
         ImGui::End();
@@ -81,8 +81,15 @@ void EditorWindow::_draw_editor() {
                 _start_new_scene();
                 return;
             }
-            ImGui::MenuItem("Open");
-            ImGui::MenuItem("Save");
+            if (ImGui::MenuItem("Open")) {
+                ImGui::EndMenu();
+                ImGui::EndMainMenuBar();
+                _load_scene_from_path("test.ascn");
+                return;
+            }
+            if (ImGui::MenuItem("Save")) {
+                Engine::serialize_scene(_root, "test.ascn");
+            }
             ImGui::Separator();
             if (ImGui::MenuItem("Exit")) {
                 _window.close();
@@ -291,10 +298,19 @@ void EditorWindow::_add_game_object(const std::string &type_name, GameObject *pa
 }
 
 void EditorWindow::_start_new_scene() {
+    _selected_game_object = nullptr;
     if (_root != nullptr) {
         _root->free();
-        _selected_game_object = nullptr;
         _root = nullptr;
     }
     _root = new GameObject("root");
+}
+
+void EditorWindow::_load_scene_from_path(const std::string &file_path) {
+    _selected_game_object = nullptr;
+    if (_root != nullptr) {
+        _root->free();
+        _root = nullptr;
+    }
+    _root = Engine::deserialize_scene(file_path);
 }

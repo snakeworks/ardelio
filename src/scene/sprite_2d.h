@@ -21,6 +21,8 @@ public:
     
     const Color &get_modulate() const;
     void set_modulate(const Color &new_color);
+
+    virtual std::string nameof_type() const override;
 private:
     static Texture *_default_texture;
     Texture *_texture;

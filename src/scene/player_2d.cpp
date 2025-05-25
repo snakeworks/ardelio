@@ -1,6 +1,7 @@
 #include "player_2d.h"
 #include "input/input.h"
 #include "resources/audio_file.h"
+#include "engine/engine.h"
 
 #include <iostream>
 
@@ -27,4 +28,8 @@ void Player2D::update(float delta) {
 
     // Set the new velocity
     set_velocity(horizontal_velocity);
+}
+
+std::string Player2D::nameof_type() const {
+    return NAMEOF(Player2D);
 }

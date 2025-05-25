@@ -25,4 +25,5 @@ private:
     static std::unordered_map<std::string, instance_creator> _creators;
 };
 
+#define NAMEOF(x) #x
 #define REGISTER_TYPE(TYPE) const bool registered_##TYPE = [] { Engine::register_type(#TYPE, [] { return new TYPE("NewGameObject"); }); return true; }();

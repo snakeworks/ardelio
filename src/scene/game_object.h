@@ -54,6 +54,7 @@ public:
 
     void set_property(const std::string &name, Variant value);
     Variant get_property(const std::string &name);
+    virtual std::string nameof_type() const;
 protected:
     std::vector<Property> _property_list;
 private:

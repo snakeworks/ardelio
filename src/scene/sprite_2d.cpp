@@ -1,4 +1,5 @@
 #include "sprite_2d.h"
+#include "engine/engine.h"
 
 Texture *Sprite2D::_default_texture = new Texture("assets/white64x64.png");
 
@@ -70,4 +71,8 @@ const Color &Sprite2D::get_modulate() const {
 void Sprite2D::set_modulate(const Color &new_color) {
     _modulate = new_color;
     _sf_sprite.setColor(_modulate.get_sf_color());
+}
+
+std::string Sprite2D::nameof_type() const {
+    return NAMEOF(Sprite2D);
 }

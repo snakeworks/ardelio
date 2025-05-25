@@ -16,6 +16,8 @@ public:
 
     uint32_t get_font_size() const;
     void set_font_size(uint32_t new_size);
+
+    virtual std::string nameof_type() const override;
 private:
     std::string _text;
     sf::Text _sf_text;

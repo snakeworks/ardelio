@@ -49,6 +49,7 @@ public:
     bool get_static() const;
     void set_static(bool new_static);
 
+    virtual std::string nameof_type() const override;
 protected:
     bool _static;
     

@@ -12,6 +12,8 @@ public:
 
     Color get_modulate() const;
     void set_modulate(const Color &new_modulate);
+
+    virtual std::string nameof_type() const override;
 private:
     Vector2 _size;
     Color _modulate;

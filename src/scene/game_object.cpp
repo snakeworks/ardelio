@@ -1,5 +1,6 @@
 #include "game_object.h"
 #include "setup/game_window.h"
+#include "engine/engine.h"
 
 #include <algorithm>
 
@@ -30,13 +31,15 @@ void GameObject::free() {
     if (get_parent() != nullptr) {
         auto p = get_parent()->remove_child(this);
     }
+    _property_list.clear();
     for (GameObject *child : _children) {
         if (child != nullptr) {
             child->free();
         }
     }
-    _children.clear();
-    delete this;
+    if (this != nullptr) {
+        delete this;
+    }
 }
 
 void GameObject::render(sf::RenderTarget *target) {}
@@ -211,4 +214,8 @@ Variant GameObject::get_property(const std::string &name) {
         }
     }
     return Variant::nil;
+}
+
+std::string GameObject::nameof_type() const {
+    return NAMEOF(GameObject);
 }

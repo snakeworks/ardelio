@@ -1,4 +1,5 @@
 #include "gui_element.h"
+#include "engine/engine.h"
 
 GUIElement::GUIElement(const std::string &name) 
     : GameObject(name), _modulate(Color::white), _size(Vector2::zero) {}
@@ -17,4 +18,8 @@ Color GUIElement::get_modulate() const {
 
 void GUIElement::set_modulate(const Color &new_modulate) {
     _modulate = new_modulate;
+}
+
+std::string GUIElement::nameof_type() const {
+    return NAMEOF(GUIElement);
 }

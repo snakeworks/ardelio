@@ -11,4 +11,6 @@ public:
     virtual void on_pressed();
     virtual void on_focus();
     virtual void on_focus_lost();
+
+    virtual std::string nameof_type() const override;
 };
