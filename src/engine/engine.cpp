@@ -3,6 +3,7 @@
 
 #include <fstream>
 
+std::vector<std::string> Engine::_logs = {};
 std::unordered_map<std::string, Engine::instance_creator> Engine::_creators = {};
 
 const std::string Engine::get_version() {
@@ -33,6 +34,29 @@ std::vector<std::string> Engine::get_all_type_names() {
         type_names.push_back(element.first);
     }
     return type_names;
+}
+
+const std::string Engine::_get_current_time_string() {
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::tm *local_time = std::localtime(&now_time);
+
+    char buffer[20];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", local_time);
+
+    return std::string(buffer);
+}
+
+const std::vector<std::string> Engine::get_logs() {
+    return _logs;
+}
+
+void Engine::log(const std::string &message) {
+    _logs.push_back("[" + _get_current_time_string() + "][LOG] " + message);
+}
+
+void Engine::log_error(const std::string &message) {
+    _logs.push_back("[" + _get_current_time_string() + "][ERR] " + message);
 }
 
 void Engine::serialize_scene(GameObject *root, const std::string &file_path) {

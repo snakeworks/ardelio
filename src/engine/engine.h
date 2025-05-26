@@ -19,11 +19,18 @@ public:
     static GameObject *create(const std::string &type_name);
     static std::vector<std::string> get_all_type_names();
 
+    static const std::vector<std::string> get_logs();
+    static void log(const std::string &message);
+    static void log_error(const std::string &message);
+    
     static void serialize_scene(GameObject *root, const std::string &file_path);
     static GameObject *deserialize_scene(const std::string &file_path);
 private:
+    static const std::string _get_current_time_string();
+
+    static std::vector<std::string> _logs;
     static std::unordered_map<std::string, instance_creator> _creators;
 };
 
-#define NAMEOF(x) #x
+#define NAMEOF(X) #X
 #define REGISTER_TYPE(TYPE) const bool registered_##TYPE = [] { Engine::register_type(#TYPE, [] { return new TYPE(#TYPE); }); return true; }();

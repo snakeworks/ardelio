@@ -107,7 +107,9 @@ void EditorWindow::_draw_editor() {
             if (ImGui::MenuItem("Run")) {
                 _run_debug_mode();
             }
-            ImGui::MenuItem("Build");
+            if (ImGui::MenuItem("Build")) {
+                Engine::log_error("Failed to build scene.");
+            }
             ImGui::Separator();
             ImGui::MenuItem("Settings");
             ImGui::EndMenu();
@@ -189,18 +191,17 @@ void EditorWindow::_draw_editor() {
     }
     ImGui::End();
     
-    // Drawing file system
-    ImGui::Begin("File System");
-    std::function<void(const char*, const std::vector<std::string>&)> draw_folder = [&](const char* folder_name, const std::vector<std::string>& files) {
-        if (ImGui::TreeNodeEx((std::string("[] ") + folder_name).c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-            for (const auto &file : files) {
-                ImGui::Text("%s", file.c_str());
-            }
-            ImGui::TreePop();
+    // Drawing logs
+    ImGui::Begin("Logs");
+    for (auto log : Engine::get_logs()) {
+        if (log.find("[LOG]") != std::string::npos) {
+            ImGui::TextColored(ImVec4(0.65f, 0.65f, 0.65f, 1.0f), "%s", log.c_str());
+        } else if (log.find("[ERR]") != std::string::npos) {
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", log.c_str());
+        } else {
+            ImGui::Text("%s", log.c_str());
         }
-    };
-
-    draw_folder("data", {"player.png", "background.png", "main.ascn"});
+    }
     ImGui::End();
     
     // Drawing inspector
@@ -338,6 +339,7 @@ void EditorWindow::_add_game_object(const std::string &type_name, GameObject *pa
         }
     }
     parent->add_child(new_object);
+    Engine::log("Added object " + new_object->get_name() + ".");
 }
 
 void EditorWindow::_start_new_scene() {
@@ -347,6 +349,7 @@ void EditorWindow::_start_new_scene() {
         _root = nullptr;
     }
     _root = new GameObject("root");
+    Engine::log("Started new scene.");
 }
 
 void EditorWindow::_load_scene_from_path(const std::string &file_path) {
@@ -356,6 +359,7 @@ void EditorWindow::_load_scene_from_path(const std::string &file_path) {
         _root = nullptr;
     }
     _root = Engine::deserialize_scene(file_path);
+    Engine::log("Loaded scene from from: " + file_path);
 }
 
 void EditorWindow::_run_debug_mode() {
@@ -364,5 +368,6 @@ void EditorWindow::_run_debug_mode() {
         {1280u, 720u}, "Ardelio Debug", scene
     );
     game_window.run();
+    Engine::log("Exited debug mode.");
     scene->free();
 }

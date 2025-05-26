@@ -19,7 +19,7 @@
       children:
   - name: PhysicsBody2D
     type: PhysicsBody2D
-    local_position: Vector3(164.000000,46.000000,0.000000)
+    local_position: Vector3(331.000000,46.000000,0.000000)
     local_rotation: 0.000000
     is_static: false
     shape_size: Vector2(32.000000,32.000000)
