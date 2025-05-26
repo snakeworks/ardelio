@@ -15,6 +15,10 @@ Vector2 CollisionShape::get_size() const {
     return _size;
 }
 
+void CollisionShape::set_size(const Vector2 &new_size) {
+    _size = new_size;
+}
+
 float CollisionShape::get_radius() const {
     return _radius;
 }

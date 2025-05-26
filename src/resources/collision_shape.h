@@ -12,8 +12,9 @@ public:
     bool is_circle();
 
     Vector2 get_size() const;
-    float get_radius() const;
+    void set_size(const Vector2 &new_size);
 
+    float get_radius() const;
 private:
     Vector2 _size;
     float _radius; 

@@ -3,29 +3,16 @@
   local_position: Vector3(0.000000,0.000000,0.000000)
   local_rotation: 0.000000
   children:
-  - name: NewGameObject
-    type: Sprite2D
-    local_position: Vector3(133.000000,85.000000,0.000000)
-    local_rotation: 1.030000
-    modulate: Color(255,255,255,255)
-    size: Vector2(64.000000,64.000000)
-    children:
-  - name: NewGameObject1
-    type: Sprite2D
-    local_position: Vector3(189.000000,254.000000,0.000000)
+  - name: PhysicsBody2D
+    type: PhysicsBody2D
+    local_position: Vector3(163.000000,65.000000,0.000000)
     local_rotation: 0.000000
-    modulate: Color(14,230,198,255)
-    size: Vector2(64.000000,64.000000)
+    shape_size: Vector2(32.000000,32.000000)
     children:
-    - name: NewGameObject
+    - name: Sprite2D
       type: Sprite2D
-      local_position: Vector3(180.000000,100.000000,0.000000)
-      local_rotation: 0.350000
-      modulate: Color(197,34,34,255)
-      size: Vector2(64.000000,64.000000)
+      local_position: Vector3(0.000000,0.000000,0.000000)
+      local_rotation: 0.000000
+      modulate: Color(255,255,255,255)
+      size: Vector2(32.000000,32.000000)
       children:
-  - name: NewGameObject2
-    type: GameObject
-    local_position: Vector3(3.000000,188.000000,0.000000)
-    local_rotation: 0.000000
-    children:

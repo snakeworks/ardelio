@@ -17,7 +17,8 @@ GameObject::GameObject(const std::string &name)
             [this]() { 
                 Vector3 local_position = this->get_local_position();
                 return Variant(VariantType::VECTOR3, &local_position);
-            }, [this](Variant variant) { this->set_local_position(variant.as_vector3()); })
+            },
+            [this](Variant variant) { this->set_local_position(variant.as_vector3()); })
         );
         _property_list.push_back(Property("local_rotation", group_name,
             [this]() {

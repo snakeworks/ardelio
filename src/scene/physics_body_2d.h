@@ -5,7 +5,7 @@
 
 class PhysicsBody2D : public GameObject {
 public:
-    PhysicsBody2D(const std::string &name, const CollisionShape &shape);
+    PhysicsBody2D(const std::string &name);
 
     void reset();
     void reset(const Vector2 &position);

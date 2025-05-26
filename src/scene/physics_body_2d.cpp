@@ -1,9 +1,23 @@
 #include "physics_body_2d.h"
 #include "engine/engine.h"
 
-PhysicsBody2D::PhysicsBody2D(const std::string &name, const CollisionShape &shape) : GameObject(name), _shape(shape), _static(false), _mass(1.0f), 
+PhysicsBody2D::PhysicsBody2D(const std::string &name) : GameObject(name), _shape(CollisionShape({32.0f, 32.0f})), _static(false), _mass(1.0f), 
     _theta_dot(0.0f), _theta_dot_dot(0.0f), _itheta_dot_dot(0.0f), _inertia(1.0f),  _restitution(1.0f)
-{}
+{
+    const std::string group_name = "physics_body_2d";
+    _property_list.push_back(
+        Property(
+            "shape_size", group_name,
+            [this]() {
+                Vector2 size = this->get_shape().get_size();
+                return Variant(VariantType::VECTOR2, &size);
+            },
+            [this](Variant variant) {
+                this->get_shape().set_size(variant.as_vector2());
+            }
+        )
+    );
+}
 
 void PhysicsBody2D::reset() {
     set_velocity(Vector2::zero);

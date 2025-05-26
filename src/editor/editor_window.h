@@ -28,4 +28,6 @@ private:
     
     void _start_new_scene();
     void _load_scene_from_path(const std::string &file_path);
+
+    void _run_debug_mode();
 };

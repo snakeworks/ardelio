@@ -104,8 +104,12 @@ void EditorWindow::_draw_editor() {
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Project")) {
-            ImGui::MenuItem("Project Settings");
+            if (ImGui::MenuItem("Run")) {
+                _run_debug_mode();
+            }
             ImGui::MenuItem("Build");
+            ImGui::Separator();
+            ImGui::MenuItem("Settings");
             ImGui::EndMenu();
         }
         float windowWidth = ImGui::GetWindowWidth();
@@ -133,15 +137,16 @@ void EditorWindow::_draw_editor() {
         // Handle selection and renaming
         if (ImGui::IsItemClicked(ImGuiMouseButton_Left) || ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
             _selected_game_object = obj;
+            _current_popup = EditorWindowPopupType::NONE;
         }
 
-        if (_selected_game_object == obj) {
-            if ((ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) || ImGui::IsKeyPressed(ImGuiKey_F2)) && _current_popup == EditorWindowPopupType::NONE) {
+        if (_selected_game_object == obj && _current_popup == EditorWindowPopupType::NONE) {
+            if ((ImGui::IsItemClicked() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) || ImGui::IsKeyPressed(ImGuiKey_F2)) {
                 strncpy(rename_buffer, obj->get_name().c_str(), sizeof(rename_buffer));
                 rename_buffer[sizeof(rename_buffer) - 1] = '\0';
                 _current_popup = EditorWindowPopupType::OBJECT_RENAME;
             }
-            if (ImGui::IsKeyPressed(ImGuiKey_Delete) && obj != _root && _current_popup == EditorWindowPopupType::NONE) {
+            if (ImGui::IsKeyPressed(ImGuiKey_Delete) && obj != _root) {
                 _selected_game_object = nullptr;
                 obj->free();
             }
@@ -345,4 +350,13 @@ void EditorWindow::_load_scene_from_path(const std::string &file_path) {
         _root = nullptr;
     }
     _root = Engine::deserialize_scene(file_path);
+}
+
+void EditorWindow::_run_debug_mode() {
+    GameObject *scene = Engine::deserialize_scene("test.ascn");
+    GameWindow game_window = GameWindow(
+        {1280u, 720u}, "Ardelio Debug", scene
+    );
+    game_window.run();
+    scene->free();
 }

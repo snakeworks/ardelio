@@ -26,4 +26,4 @@ private:
 };
 
 #define NAMEOF(x) #x
-#define REGISTER_TYPE(TYPE) const bool registered_##TYPE = [] { Engine::register_type(#TYPE, [] { return new TYPE("NewGameObject"); }); return true; }();
+#define REGISTER_TYPE(TYPE) const bool registered_##TYPE = [] { Engine::register_type(#TYPE, [] { return new TYPE(#TYPE); }); return true; }();

@@ -67,7 +67,7 @@ void GameWindow::run() {
             Input::sf_on_event(event, this);
         }
         
-        window.clear(sf::Color(15, 15, 15));
+        window.clear(sf::Color(48, 48, 48));
         _process(&window, _root, delta);
         if (_custom_update) {
             _custom_update(delta, &window);
