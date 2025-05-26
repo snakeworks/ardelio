@@ -362,7 +362,7 @@ void EditorWindow::_start_new_scene() {
 void EditorWindow::_save_scene_dialog() {
     auto path = tinyfd_saveFileDialog(
         "Save scene",
-        std::filesystem::current_path().c_str(),
+        std::filesystem::current_path().string().c_str(),
         1,
         scene_file_filter_patterns,
         NULL
@@ -388,7 +388,7 @@ void EditorWindow::_save_scene(const std::string &file_path) {
 void EditorWindow::_load_scene_dialog() {
     auto path = tinyfd_openFileDialog(
         "Open .ascn file",
-        std::filesystem::current_path().c_str(),
+        std::filesystem::current_path().string().c_str(),
         1,
         scene_file_filter_patterns,
         NULL,
