@@ -10,8 +10,10 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 #include <algorithm>
+#include "external/tinyfiledialogs.h"
 
 sf::RenderWindow _window;
+static const char *scene_file_filter_patterns[1] = {"*.ascn"};
 
 EditorWindow::EditorWindow() : _current_popup(EditorWindowPopupType::NONE) {
     Engine::register_engine_types();
@@ -86,11 +88,14 @@ void EditorWindow::_draw_editor() {
             if (ImGui::MenuItem("Open")) {
                 ImGui::EndMenu();
                 ImGui::EndMainMenuBar();
-                _load_scene_from_path("test.ascn");
+                _load_scene_dialog();
                 return;
             }
             if (ImGui::MenuItem("Save")) {
-                Engine::serialize_scene(_root, "test.ascn");
+                ImGui::EndMenu();
+                ImGui::EndMainMenuBar();
+                _save_scene_dialog();
+                return;
             }
             ImGui::Separator();
             if (ImGui::MenuItem("Exit")) {
@@ -354,14 +359,54 @@ void EditorWindow::_start_new_scene() {
     Engine::log("Started new scene.");
 }
 
-void EditorWindow::_load_scene_from_path(const std::string &file_path) {
+void EditorWindow::_save_scene_dialog() {
+    auto path = tinyfd_saveFileDialog(
+        "Save scene",
+        std::filesystem::current_path().c_str(),
+        1,
+        scene_file_filter_patterns,
+        NULL
+    );
+    if (path != NULL) {
+        std::string final_path = path;
+        if (std::string(path).find(".ascn") == std::string::npos) {
+            final_path = std::string(path) + ".ascn";
+        }
+        _save_scene(final_path);
+    }
+}
+
+void EditorWindow::_save_scene(const std::string &file_path) {
+    try {
+        Engine::serialize_scene(_root, file_path);
+        Engine::log("Saved scene to: " + file_path);
+    } catch (const std::exception &e) {
+        Engine::log_error(std::string("Failed to save scene to: ") + file_path + ". " + e.what());
+    }
+}
+
+void EditorWindow::_load_scene_dialog() {
+    auto path = tinyfd_openFileDialog(
+        "Open .ascn file",
+        std::filesystem::current_path().c_str(),
+        1,
+        scene_file_filter_patterns,
+        NULL,
+        0
+    );
+    if (path != NULL) {
+        _load_scene(path);
+    }
+}
+
+void EditorWindow::_load_scene(const std::string &file_path) {
     _selected_game_object = nullptr;
     if (_root != nullptr) {
         _root->free();
         _root = nullptr;
     }
     _root = Engine::deserialize_scene(file_path);
-    Engine::log("Loaded scene from from: " + file_path);
+    Engine::log("Loaded scene from: " + file_path);
 }
 
 void EditorWindow::_run_debug_mode() {

@@ -27,7 +27,10 @@ private:
     void _add_game_object(const std::string &type_name, GameObject *parent);
     
     void _start_new_scene();
-    void _load_scene_from_path(const std::string &file_path);
+    void _save_scene_dialog();
+    void _save_scene(const std::string &file_path);
+    void _load_scene_dialog();
+    void _load_scene(const std::string &file_path);
 
     void _run_debug_mode();
 };
