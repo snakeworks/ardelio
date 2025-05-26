@@ -29,6 +29,8 @@ void EditorWindow::run() {
     auto& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+    Engine::log("Running Ardelio " + Engine::get_version());
+
     _start_new_scene();
     
     sf::Clock deltaClock;
@@ -108,7 +110,7 @@ void EditorWindow::_draw_editor() {
                 _run_debug_mode();
             }
             if (ImGui::MenuItem("Build")) {
-                Engine::log_error("Failed to build scene.");
+                Engine::log_error("Failed to build project.");
             }
             ImGui::Separator();
             ImGui::MenuItem("Settings");

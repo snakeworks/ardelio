@@ -7,7 +7,7 @@ std::vector<std::string> Engine::_logs = {};
 std::unordered_map<std::string, Engine::instance_creator> Engine::_creators = {};
 
 const std::string Engine::get_version() {
-    return "v0.38";
+    return "v0.48";
 }
 
 void Engine::register_type(const std::string &type_name, instance_creator creator) {
