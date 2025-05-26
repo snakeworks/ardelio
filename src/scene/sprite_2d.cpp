@@ -1,7 +1,7 @@
 #include "sprite_2d.h"
 #include "engine/engine.h"
 
-Texture *Sprite2D::_default_texture = new Texture("assets/white64x64.png");
+Texture *Sprite2D::_default_texture = new Texture("assets/white32x32.png");
 
 Sprite2D::Sprite2D(const std::string &name) 
     : GameObject(name),

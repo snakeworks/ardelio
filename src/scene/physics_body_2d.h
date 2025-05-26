@@ -10,8 +10,8 @@ public:
     void reset();
     void reset(const Vector2 &position);
 
-    CollisionShape get_shape() const;
-    void set_shape(const CollisionShape &new_shape);
+    CollisionShape *get_shape() const;
+    void set_shape(CollisionShape *new_shape);
 
     Vector2 get_temp_position();
     void set_temp_position(const Vector2 &new_temp_position);
@@ -53,7 +53,7 @@ public:
 protected:
     bool _static;
     
-    CollisionShape _shape;
+    CollisionShape *_shape;
 
     Vector2 _velocity;
     Vector2 _temp_position;

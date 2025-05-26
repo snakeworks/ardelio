@@ -38,7 +38,7 @@ bool PhysicsSpace2D::is_at_rest() {
 
 void PhysicsSpace2D::circle_vs_circle_collision(PhysicsBody2D *o, PhysicsBody2D *p) {
     float distance = p->get_global_position_2d().distance(o->get_global_position_2d());
-    float radius_sum = p->get_shape().get_radius() + o->get_shape().get_radius();
+    float radius_sum = p->get_shape()->get_radius() + o->get_shape()->get_radius();
     float dx = distance - radius_sum;
 
     if (dx <= 0) {
@@ -80,9 +80,9 @@ void PhysicsSpace2D::circle_vs_circle_collision(PhysicsBody2D *o, PhysicsBody2D 
         float stuck = 0.01f;
         if ((abs(p->get_global_position_2d().x - o->get_global_position_2d().x) < stuck) && 
             (abs(p->get_global_position_2d().y - o->get_global_position_2d().y) < stuck)) {
-            o->set_temp_position({ o->get_global_position_2d().x - (o->get_shape().get_radius() + 0.1f), 
+            o->set_temp_position({ o->get_global_position_2d().x - (o->get_shape()->get_radius() + 0.1f), 
                                   o->get_global_position_2d().y });
-            p->set_temp_position({ o->get_global_position_2d().x + (p->get_shape().get_radius() + 0.1f), 
+            p->set_temp_position({ o->get_global_position_2d().x + (p->get_shape()->get_radius() + 0.1f), 
                                   o->get_global_position_2d().y });
         }
     }
@@ -97,14 +97,14 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsBody
     // TODO: COULD BE WRONG??
     if (circle) {
         pos_o = o->get_global_position_2d();
-        len_o = o->get_shape().get_radius();
+        len_o = o->get_shape()->get_radius();
         pos_p = p->get_global_position_2d();
-        len_p = p->get_shape().get_size() / 2.0f;
+        len_p = p->get_shape()->get_size() / 2.0f;
     } else {
         pos_p = p->get_global_position_2d();
-        len_p = p->get_shape().get_radius();
+        len_p = p->get_shape()->get_radius();
         pos_o = o->get_global_position_2d();
-        len_o = o->get_shape().get_size() / 2.0f;
+        len_o = o->get_shape()->get_size() / 2.0f;
     }
 
     bool condition = pos_o.x - len_o.x < pos_p.x + len_p.x && pos_o.x + len_o.x > pos_p.x - len_p.x &&
@@ -172,9 +172,9 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsBody
 
 void PhysicsSpace2D::rectangle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsBody2D *p) {
     Vector2 pos_o = o->get_global_position_2d();
-    Vector2 len_o = o->get_shape().get_size() / 2.0f;
+    Vector2 len_o = o->get_shape()->get_size() / 2.0f;
     Vector2 pos_p = p->get_global_position_2d();
-    Vector2 len_p = p->get_shape().get_size() / 2.0f;
+    Vector2 len_p = p->get_shape()->get_size() / 2.0f;
 
     bool condition = pos_o.x - len_o.x < pos_p.x + len_p.x && pos_o.x + len_o.x > pos_p.x - len_p.x &&
                         pos_o.y - len_o.y < pos_p.y + len_p.y && pos_o.y + len_o.y > pos_p.y - len_p.y;
@@ -306,13 +306,13 @@ void PhysicsSpace2D::physics_update(float delta) {
                 continue;
             }
 
-            if (o->get_shape().is_circle() && p->get_shape().is_circle()) {
+            if (o->get_shape()->is_circle() && p->get_shape()->is_circle()) {
                 circle_vs_circle_collision(o, p);
-            } else if (o->get_shape().is_circle() && p->get_shape().is_rectangle()) {
+            } else if (o->get_shape()->is_circle() && p->get_shape()->is_rectangle()) {
                 circle_vs_rectangle_collision(o, p, true);
-            } else if (o->get_shape().is_rectangle() && p->get_shape().is_circle()) {
+            } else if (o->get_shape()->is_rectangle() && p->get_shape()->is_circle()) {
                 circle_vs_rectangle_collision(o, p, false);
-            } else if (o->get_shape().is_rectangle() && p->get_shape().is_rectangle()) {
+            } else if (o->get_shape()->is_rectangle() && p->get_shape()->is_rectangle()) {
                 rectangle_vs_rectangle_collision(o, p);
             }
         }

@@ -7,6 +7,7 @@
 
 enum VariantType {
     NIL, // Had to call it nil because null and NULL are already reserved
+    BOOL,
     FLOAT,
     VECTOR2,
     VECTOR3,
@@ -18,6 +19,8 @@ public:
     Variant(const VariantType type, void *value);
     
     VariantType get_type();
+    
+    bool as_bool();
     float as_float();
     Vector2 as_vector2();
     Vector3 as_vector3();

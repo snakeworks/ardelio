@@ -1,19 +1,31 @@
 #include "physics_body_2d.h"
 #include "engine/engine.h"
 
-PhysicsBody2D::PhysicsBody2D(const std::string &name) : GameObject(name), _shape(CollisionShape({32.0f, 32.0f})), _static(false), _mass(1.0f), 
+PhysicsBody2D::PhysicsBody2D(const std::string &name) : GameObject(name), _shape(new CollisionShape({32.0f, 32.0f})), _static(false), _mass(1.0f), 
     _theta_dot(0.0f), _theta_dot_dot(0.0f), _itheta_dot_dot(0.0f), _inertia(1.0f),  _restitution(1.0f)
 {
     const std::string group_name = "physics_body_2d";
     _property_list.push_back(
         Property(
+            "is_static", group_name,
+            [this]() {
+                bool is_static = this->get_static();
+                return Variant(VariantType::BOOL, &is_static);
+            },
+            [this](Variant variant) {
+                this->set_static(variant.as_bool());       
+            }
+        )
+    );
+    _property_list.push_back(
+        Property(
             "shape_size", group_name,
             [this]() {
-                Vector2 size = this->get_shape().get_size();
+                Vector2 size = this->get_shape()->get_size();
                 return Variant(VariantType::VECTOR2, &size);
             },
             [this](Variant variant) {
-                this->get_shape().set_size(variant.as_vector2());
+                this->get_shape()->set_size(variant.as_vector2());
             }
         )
     );
@@ -28,11 +40,11 @@ void PhysicsBody2D::reset(const Vector2 &position) {
     set_velocity(Vector2::zero);
 }
 
-CollisionShape PhysicsBody2D::get_shape() const {
+CollisionShape *PhysicsBody2D::get_shape() const {
     return _shape;
 }
 
-void PhysicsBody2D::set_shape(const CollisionShape &new_shape) {
+void PhysicsBody2D::set_shape(CollisionShape *new_shape) {
     _shape = new_shape;
 }
 

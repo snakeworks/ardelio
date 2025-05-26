@@ -9,6 +9,13 @@ VariantType Variant::get_type() {
 
 const Variant Variant::nil = Variant(VariantType::NIL, nullptr);
 
+bool Variant::as_bool() {
+    if (_type != VariantType::BOOL) {
+        throw "Variant is not a bool.";
+    }
+    return *static_cast<bool*>(_value);
+}
+
 float Variant::as_float() {
     if (_type != VariantType::FLOAT) {
         throw "Variant is not a float.";
@@ -41,6 +48,9 @@ const std::string Variant::to_string() {
     switch (get_type()) {
         case VariantType::NIL: {
             return "nil";
+        }
+        case VariantType::BOOL: {
+            return as_bool() ? "true" : "false";
         }
         case VariantType::FLOAT: {
             return std::to_string(as_float());
@@ -98,6 +108,9 @@ Variant Variant::from_string(const std::string &string) {
         uint8_t a = static_cast<uint8_t>(std::stoi(string.substr(third_comma + 1, end - third_comma - 1)));
         Color *color = new Color{r, g, b, a};
         return Variant(VariantType::COLOR, color);
+    } else if (string == "true" || string == "false") {
+        bool *bool_value = new bool(string == "true");
+        return Variant(VariantType::BOOL, bool_value);
     } else {
         try {
             float value = std::stof(string);

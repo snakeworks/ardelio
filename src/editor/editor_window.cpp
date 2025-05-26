@@ -152,9 +152,8 @@ void EditorWindow::_draw_editor() {
             }
         }
 
-        // Object picker popup menu
-        if (ImGui::BeginPopupContextItem("ObjectPickerPopup")) {
-            _selected_game_object = obj;
+        // Right click menu for objects
+        if (_selected_game_object == obj && ImGui::BeginPopupContextItem("GameObjectContextMenu")) {
             if (ImGui::MenuItem("Add Child")) {
                 _current_popup = EditorWindowPopupType::OBJECT_PICKER;
             }
@@ -220,6 +219,13 @@ void EditorWindow::_draw_editor() {
             }
             ImGui::Text("%s", property.name.c_str());
             switch (property.get_function().get_type()) {
+                case VariantType::BOOL: {
+                    bool cur_value = property.get_function().as_bool();
+                    if (ImGui::Checkbox(("##" + property.name).c_str(), &cur_value)) {
+                        property.set_function(Variant(VariantType::BOOL, &cur_value));
+                    }
+                    break;
+                }
                 case VariantType::FLOAT: {
                     float cur_value = property.get_function().as_float();
                     if (ImGui::DragFloat(("##" + property.name).c_str(), &cur_value, 0.01f, 0.0f, 6.28f)) {

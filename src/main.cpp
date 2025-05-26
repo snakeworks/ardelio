@@ -1,7 +1,7 @@
 // #include <ardelio.h>
 // #include <SFML/Graphics.hpp>
 
-// Texture white_texture("assets/white64x64.png");
+// Texture white_texture("assets/white32x32.png");
 
 // void create_body(GameWindow *window, Vector2 position, Vector2 size, float mass = 1.0f, bool is_static = false) {
 //     auto *body = new PhysicsBody2D("Body", CollisionShape(size));
