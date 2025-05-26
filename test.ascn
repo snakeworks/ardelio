@@ -16,3 +16,16 @@
       modulate: Color(255,255,255,255)
       size: Vector2(32.000000,32.000000)
       children:
+  - name: PhysicsBody2D1
+    type: PhysicsBody2D
+    local_position: Vector3(190.000000,13.000000,0.000000)
+    local_rotation: 0.000000
+    shape_size: Vector2(32.000000,32.000000)
+    children:
+    - name: Sprite2D
+      type: Sprite2D
+      local_position: Vector3(0.000000,0.000000,0.000000)
+      local_rotation: 0.000000
+      modulate: Color(255,255,255,255)
+      size: Vector2(64.000000,64.000000)
+      children:

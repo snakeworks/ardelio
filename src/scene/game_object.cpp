@@ -8,7 +8,8 @@ GameObject::GameObject(const std::string &name)
     : _name(name), 
     _local_position(Vector3::zero), 
     _local_rotation(0.0f), 
-    _parent(nullptr), 
+    _parent(nullptr),
+    _window(nullptr),
     _children({}),
     _property_list({}),
     _is_freed(false) {
@@ -44,6 +45,7 @@ void GameObject::free() {
         }
     }
     if (this != nullptr) {
+        set_window(nullptr);
         delete this;
     }
 }
@@ -65,6 +67,11 @@ GameWindow *GameObject::get_window() const {
 }
 
 void GameObject::set_window(GameWindow *window) {
+    if (window == nullptr && _window != nullptr) {
+        _window->on_game_object_exit(this);
+    } else if (window != nullptr) {
+        window->on_game_object_enter(this);
+    }
     _window = window;
     for (GameObject *child : _children) {
         child->set_window(_window);

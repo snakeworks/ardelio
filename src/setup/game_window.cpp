@@ -41,14 +41,12 @@ void GameWindow::load_root(GameObject *new_root, bool unallocate_previous) {
         return;
     }
     if (_root != nullptr) {
-        on_game_object_exit(_root);
         if (unallocate_previous) {
             _root->free();
         }
     }
     _root = new_root;
     _root->set_window(this);
-    on_game_object_enter(_root);
 }
 
 void GameWindow::set_custom_update(std::function<void(float, sf::RenderWindow*)> func) {
@@ -56,6 +54,8 @@ void GameWindow::set_custom_update(std::function<void(float, sf::RenderWindow*)>
 }
 
 void GameWindow::run() {
+    load_root(_root, false);
+
     sf::Clock clock = sf::Clock();
     sf::RenderWindow window(sf::VideoMode({_resolution.x, _resolution.y}), _title);
     while (window.isOpen()) {
