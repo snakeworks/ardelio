@@ -52,8 +52,9 @@ public:
 
     std::vector<Property> get_property_list();
 
-    void set_property(const std::string &name, Variant value);
+    bool has_property(const std::string &name);
     Variant get_property(const std::string &name);
+    void set_property(const std::string &name, Variant value);
     virtual std::string nameof_type() const;
 protected:
     std::vector<Property> _property_list;

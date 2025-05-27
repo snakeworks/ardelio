@@ -6,7 +6,7 @@
 
 class Texture : public Resource {
 public:
-Texture();
+    Texture();
     Texture(const std::string &path);
     const sf::Texture &get_sf_texture() const;
 private:

@@ -1,4 +1,5 @@
 #include "variant.h"
+#include "engine/engine.h"
 
 Variant::Variant(const VariantType type, void *value) 
     : _type(type), _value(value) {}
@@ -21,6 +22,13 @@ float Variant::as_float() {
         throw "Variant is not a float.";
     }
     return *static_cast<float*>(_value);
+}
+
+std::string Variant::as_string() {
+    if (_type != VariantType::STRING) {
+        throw "Variant is not a string.";
+    }
+    return *static_cast<std::string*>(_value);
 }
 
 Vector2 Variant::as_vector2() {
@@ -54,6 +62,9 @@ const std::string Variant::to_string() {
         }
         case VariantType::FLOAT: {
             return std::to_string(as_float());
+        }
+        case VariantType::STRING: {
+            return "\"" + as_string() + "\"";
         }
         case VariantType::VECTOR2: {
             auto vector = as_vector2();
@@ -111,6 +122,14 @@ Variant Variant::from_string(const std::string &string) {
     } else if (string == "true" || string == "false") {
         bool *bool_value = new bool(string == "true");
         return Variant(VariantType::BOOL, bool_value);
+    } else if (string.rfind("\"", 0) == 0) {
+        if (string.size() >= 2 && string.front() == '"' && string.back() == '"') {
+            std::string stripped_string = string.substr(1, string.size() - 2);
+            std::string *string_value = new std::string(stripped_string);
+            return Variant(VariantType::STRING, string_value);
+        } else {
+            throw "Invalid string format for Variant.";
+        }
     } else {
         try {
             float value = std::stof(string);

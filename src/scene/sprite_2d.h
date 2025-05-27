@@ -16,7 +16,7 @@ public:
     const Vector2 &get_size() const;
     void set_size(const Vector2 &new_size);
     
-    const Texture *get_texture() const;
+    Texture *get_texture() const;
     void set_texture(Texture *new_texture);
     
     const Color &get_modulate() const;

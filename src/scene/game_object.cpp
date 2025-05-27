@@ -211,13 +211,13 @@ std::vector<Property> GameObject::get_property_list() {
     return _property_list;
 }
 
-void GameObject::set_property(const std::string &name, Variant value) {
+bool GameObject::has_property(const std::string &name) {
     for (auto property : _property_list) {
         if (property.name == name) {
-            property.set_function(value);
-            return;
+            return true;
         }
     }
+    return false;
 }
 
 Variant GameObject::get_property(const std::string &name) {
@@ -227,6 +227,15 @@ Variant GameObject::get_property(const std::string &name) {
         }
     }
     return Variant::nil;
+}
+
+void GameObject::set_property(const std::string &name, Variant value) {
+    for (auto property : _property_list) {
+        if (property.name == name) {
+            property.set_function(value);
+            return;
+        }
+    }
 }
 
 std::string GameObject::nameof_type() const {

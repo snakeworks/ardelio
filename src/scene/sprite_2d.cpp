@@ -29,6 +29,27 @@ Sprite2D::Sprite2D(const std::string &name)
                 },
                 [this](Variant variant) { this->set_size(variant.as_vector2()); })
         );
+        
+        // TODO: Don't just put the static texture_path variable randomly here???
+        static std::string texture_path = this->get_texture()->get_path();
+        _property_list.push_back(
+            Property("texture_path", group_name,
+                [this]() {
+                    return Variant(VariantType::STRING, &texture_path);
+                },
+                [this](Variant variant) { 
+                    std::string path = variant.as_string();
+                    if (this->get_texture() != nullptr && path == this->get_texture()->get_path()) {
+                        return;
+                    }
+                    if (std::filesystem::exists(path)) {
+                        texture_path = path;
+                        Texture *new_texture = new Texture(path);
+                        this->set_texture(new_texture);
+                    }
+                }
+            )  
+        );
 }
 
 void Sprite2D::render(sf::RenderTarget *target) {
@@ -53,11 +74,19 @@ void Sprite2D::set_size(const Vector2 &new_size) {
         _sf_sprite.getLocalBounds().size.y / 2.f});
 }
 
-const Texture *Sprite2D::get_texture() const {
+Texture *Sprite2D::get_texture() const {
     return _texture;
 }
 
 void Sprite2D::set_texture(Texture *new_texture) {
+    if (new_texture == nullptr) {
+        return;
+    }
+    if (_texture != nullptr) {
+        // TODO: Later change to ref counting
+        delete _texture;
+        _texture = nullptr;
+    }
     _texture = new_texture;
     _sf_sprite.setTexture(_texture->get_sf_texture());
 }

@@ -258,6 +258,17 @@ void EditorWindow::_draw_editor() {
                     }
                     break;
                 }
+                case VariantType::STRING: {
+                    std::string cur_value = property.get_function().as_string();
+                    char buffer[128];
+                    strncpy(buffer, cur_value.c_str(), sizeof(buffer));
+                    buffer[sizeof(buffer) - 1] = '\0';
+                    if (ImGui::InputText(("##" + property.name).c_str(), buffer, sizeof(buffer))) {
+                        std::string new_value(buffer);
+                        property.set_function(Variant(VariantType::STRING, &new_value));
+                    }
+                    break;
+                }
                 case VariantType::VECTOR2: {
                     auto cur_value = property.get_function().as_vector2();
                     float floats[2] = {cur_value.x, cur_value.y};
