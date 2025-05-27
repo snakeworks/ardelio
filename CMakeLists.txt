@@ -64,8 +64,5 @@ install(EXPORT ArdelioTargets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Ardelio
 )
 
-add_executable(main src/main.cpp)
-target_link_libraries(main PUBLIC ardelio SFML::Graphics SFML::Audio ImGui-SFML::ImGui-SFML)
-
 add_executable(ArdelioEditor src/editor/main.cpp)
 target_link_libraries(ArdelioEditor PUBLIC ardelio SFML::Graphics SFML::Audio ImGui-SFML::ImGui-SFML)

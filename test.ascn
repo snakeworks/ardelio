@@ -3,3 +3,10 @@
   local_position: Vector3(0.000000,0.000000,0.000000)
   local_rotation: 0.000000
   children:
+  - name: Sprite2D
+    type: Sprite2D
+    local_position: Vector3(187.000000,180.000000,0.000000)
+    local_rotation: 0.000000
+    modulate: Color(255,255,255,255)
+    size: Vector2(32.000000,32.000000)
+    children:

@@ -3,8 +3,6 @@
 
 #include "imgui.h"
 #include "imgui-SFML.h"
-
-#include <iostream>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -13,7 +11,8 @@
 #include "external/tinyfiledialogs.h"
 
 sf::RenderWindow _window;
-static const char *scene_file_filter_patterns[1] = {"*.ascn"};
+static std::string _opened_scene_path = "";
+static const char *_scene_file_filter_patterns[1] = {"*.ascn"};
 
 EditorWindow::EditorWindow() : _current_popup(EditorWindowPopupType::NONE) {
     Engine::register_engine_types();
@@ -76,6 +75,14 @@ void EditorWindow::_draw_editor() {
     // Fullscreen dockspace
     ImGui::DockSpaceOverViewport();
     
+    if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && ImGui::IsKeyPressed(ImGuiKey_S)) {
+        if (!_opened_scene_path.empty()) {
+            _save_scene(_opened_scene_path);
+        } else {
+            _save_scene_dialog();
+        }
+    }
+
     // Drawing main menu bar
     if (ImGui::BeginMainMenuBar()) {
         if (ImGui::BeginMenu("File")) {
@@ -92,6 +99,16 @@ void EditorWindow::_draw_editor() {
                 return;
             }
             if (ImGui::MenuItem("Save")) {
+                ImGui::EndMenu();
+                ImGui::EndMainMenuBar();
+                if (!_opened_scene_path.empty()) {
+                    _save_scene(_opened_scene_path);
+                } else {
+                    _save_scene_dialog();
+                }
+                return;
+            }
+            if (ImGui::MenuItem("Save as")) {
                 ImGui::EndMenu();
                 ImGui::EndMainMenuBar();
                 _save_scene_dialog();
@@ -356,6 +373,7 @@ void EditorWindow::_start_new_scene() {
         _root = nullptr;
     }
     _root = new GameObject("root");
+    _opened_scene_path = "";
     Engine::log("Started new scene.");
 }
 
@@ -364,7 +382,7 @@ void EditorWindow::_save_scene_dialog() {
         "Save scene",
         std::filesystem::current_path().string().c_str(),
         1,
-        scene_file_filter_patterns,
+        _scene_file_filter_patterns,
         NULL
     );
     if (path != NULL) {
@@ -380,6 +398,7 @@ void EditorWindow::_save_scene(const std::string &file_path) {
     try {
         Engine::serialize_scene(_root, file_path);
         Engine::log("Saved scene to: " + file_path);
+        _opened_scene_path = file_path;
     } catch (const std::exception &e) {
         Engine::log_error(std::string("Failed to save scene to: ") + file_path + ". " + e.what());
     }
@@ -390,7 +409,7 @@ void EditorWindow::_load_scene_dialog() {
         "Open .ascn file",
         std::filesystem::current_path().string().c_str(),
         1,
-        scene_file_filter_patterns,
+        _scene_file_filter_patterns,
         NULL,
         0
     );
@@ -406,11 +425,15 @@ void EditorWindow::_load_scene(const std::string &file_path) {
         _root = nullptr;
     }
     _root = Engine::deserialize_scene(file_path);
+    _opened_scene_path = file_path;
     Engine::log("Loaded scene from: " + file_path);
 }
 
 void EditorWindow::_run_debug_mode() {
-    GameObject *scene = Engine::deserialize_scene("test.ascn");
+    if (_opened_scene_path.empty()) {
+        _save_scene_dialog();
+    }
+    GameObject *scene = Engine::deserialize_scene(_opened_scene_path);
     GameWindow game_window = GameWindow(
         {1280u, 720u}, "Ardelio Debug", scene
     );
