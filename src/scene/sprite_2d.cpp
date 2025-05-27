@@ -1,11 +1,9 @@
 #include "sprite_2d.h"
 #include "engine/engine.h"
 
-Texture *Sprite2D::_default_texture = new Texture("assets/white32x32.png");
-
 Sprite2D::Sprite2D(const std::string &name) 
     : GameObject(name),
-    _texture(_default_texture),
+    _texture(new Texture()),
     _sf_sprite(_texture->get_sf_texture()),
     _modulate(Color::white) {
         auto sf_tex_size = _texture->get_sf_texture().getSize();

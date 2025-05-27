@@ -49,15 +49,28 @@ void GameWindow::load_root(GameObject *new_root, bool unallocate_previous) {
     _root->set_window(this);
 }
 
-void GameWindow::set_custom_update(std::function<void(float, sf::RenderWindow*)> func) {
-    GameWindow::_custom_update = func;
+void GameWindow::set_on_game_start(std::function<void(sf::RenderWindow*)> func) {
+    _on_game_start_func = func;
+}
+
+void GameWindow::set_on_game_end(std::function<void(sf::RenderWindow*)> func) {
+    _on_game_end_func = func;
+}
+
+void GameWindow::set_update(std::function<void(float, sf::RenderWindow*)> func) {
+    _update_func = func;
 }
 
 void GameWindow::run() {
     load_root(_root, false);
-
+    
     sf::Clock clock = sf::Clock();
     sf::RenderWindow window(sf::VideoMode({_resolution.x, _resolution.y}), _title);
+    
+    if (_on_game_start_func) {
+        _on_game_start_func(&window);
+    }
+    
     while (window.isOpen()) {
         float delta = clock.restart().asSeconds();
         while (const std::optional<sf::Event> event = window.pollEvent()) {
@@ -69,13 +82,17 @@ void GameWindow::run() {
         
         window.clear(sf::Color(48, 48, 48));
         _process(&window, _root, delta);
-        if (_custom_update) {
-            _custom_update(delta, &window);
+        if (_update_func) {
+            _update_func(delta, &window);
         }
         _physics_space_2d.physics_update(delta);
 
         // TODO: Fix segfault when window.display() is called
         window.display();
+    }
+
+    if (_on_game_end_func) {
+        _on_game_end_func(&window);
     }
 }
 

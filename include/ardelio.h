@@ -1,3 +1,4 @@
+#include "engine/engine.h"
 #include "setup/game_window.h"
 #include "scene/game_object.h"
 #include "scene/sprite_2d.h"

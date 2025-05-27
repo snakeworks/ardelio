@@ -1,11 +1,6 @@
 #include "player_2d.h"
 #include "input/input.h"
-#include "resources/audio_file.h"
 #include "engine/engine.h"
-
-#include <iostream>
-
-AudioFile jump_audio("assets/jump.wav");
 
 Player2D::Player2D(const std::string &name)
     : PhysicsBody2D(name), speed(160) {
@@ -21,10 +16,7 @@ void Player2D::update(float delta) {
     if (Input::was_pressed_this_frame(Keycode::Space)) {
         // Check if the player is on the ground
         horizontal_velocity.y = -410.0f; // Jump force
-        jump_audio.play_immediate();
     }
-
-    // std::cout << get_velocity().x << " " << get_velocity().y << " \n";
 
     // Set the new velocity
     set_velocity(horizontal_velocity);
