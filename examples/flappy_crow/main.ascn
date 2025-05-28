@@ -1,0 +1,129 @@
+- name: root
+  type: GameObject
+  local_position: Vector3(0.000000,0.000000,0.000000)
+  local_rotation: 0.000000
+  children:
+  - name: Background
+    type: Sprite2D
+    local_position: Vector3(300.000000,360.000000,0.000000)
+    local_rotation: 0.000000
+    modulate: Color(4,103,167,255)
+    size: Vector2(600.000000,720.000000)
+    texture_path: ""
+    children:
+  - name: Player
+    type: PhysicsBody2D
+    local_position: Vector3(92.000000,265.000000,0.000000)
+    local_rotation: 0.000000
+    is_static: false
+    shape_size: Vector2(32.000000,32.000000)
+    children:
+    - name: Sprite2D
+      type: Sprite2D
+      local_position: Vector3(0.000000,0.000000,0.000000)
+      local_rotation: 0.000000
+      modulate: Color(255,255,255,255)
+      size: Vector2(32.000000,32.000000)
+      texture_path: ""
+      children:
+  - name: Pipe1
+    type: GameObject
+    local_position: Vector3(570.000000,0.000000,0.000000)
+    local_rotation: 0.000000
+    children:
+    - name: Top
+      type: PhysicsBody2D
+      local_position: Vector3(0.000000,-200.000000,0.000000)
+      local_rotation: 0.000000
+      is_static: true
+      shape_size: Vector2(32.000000,500.000000)
+      children:
+      - name: Sprite2D
+        type: Sprite2D
+        local_position: Vector3(0.000000,0.000000,0.000000)
+        local_rotation: 0.000000
+        modulate: Color(255,255,255,255)
+        size: Vector2(32.000000,500.000000)
+        texture_path: ""
+        children:
+    - name: Bottom
+      type: PhysicsBody2D
+      local_position: Vector3(0.000000,520.000000,0.000000)
+      local_rotation: 0.000000
+      is_static: true
+      shape_size: Vector2(32.000000,500.000000)
+      children:
+      - name: Sprite2D
+        type: Sprite2D
+        local_position: Vector3(0.000000,0.000000,0.000000)
+        local_rotation: 0.000000
+        modulate: Color(255,255,255,255)
+        size: Vector2(32.000000,500.000000)
+        texture_path: ""
+        children:
+  - name: Pipe2
+    type: GameObject
+    local_position: Vector3(1255.000000,89.000000,0.000000)
+    local_rotation: 0.000000
+    children:
+    - name: Top
+      type: PhysicsBody2D
+      local_position: Vector3(0.000000,-200.000000,0.000000)
+      local_rotation: 0.000000
+      is_static: true
+      shape_size: Vector2(32.000000,500.000000)
+      children:
+      - name: Sprite2D
+        type: Sprite2D
+        local_position: Vector3(0.000000,0.000000,0.000000)
+        local_rotation: 0.000000
+        modulate: Color(255,255,255,255)
+        size: Vector2(32.000000,500.000000)
+        texture_path: ""
+        children:
+    - name: Bottom
+      type: PhysicsBody2D
+      local_position: Vector3(0.000000,520.000000,0.000000)
+      local_rotation: 0.000000
+      is_static: true
+      shape_size: Vector2(32.000000,500.000000)
+      children:
+      - name: Sprite2D
+        type: Sprite2D
+        local_position: Vector3(0.000000,0.000000,0.000000)
+        local_rotation: 0.000000
+        modulate: Color(255,255,255,255)
+        size: Vector2(32.000000,500.000000)
+        texture_path: ""
+        children:
+  - name: ScoreText
+    type: Text
+    local_position: Vector3(300.000000,16.000000,0.000000)
+    local_rotation: 0.000000
+    text: "Press "Space" to Start"
+    font_size: 32.000000
+    modulate: Color(255,255,255,255)
+    children:
+  - name: Ground
+    type: PhysicsBody2D
+    local_position: Vector3(597.000000,700.000000,0.000000)
+    local_rotation: 0.000000
+    is_static: true
+    shape_size: Vector2(1280.000000,88.000000)
+    children:
+    - name: Sprite2D
+      type: Sprite2D
+      local_position: Vector3(0.000000,0.000000,0.000000)
+      local_rotation: 0.000000
+      modulate: Color(13,230,44,255)
+      size: Vector2(1280.000000,64.000000)
+      texture_path: ""
+      children:
+  - name: CenterText
+    type: Text
+    local_position: Vector3(300.000000,360.000000,0.000000)
+    local_rotation: 0.000000
+    text: "Press "Space" to Start"
+    font_size: 16.000000
+    modulate: Color(255,255,255,255)
+    children:
