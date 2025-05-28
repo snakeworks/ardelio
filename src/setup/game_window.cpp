@@ -49,15 +49,15 @@ void GameWindow::load_root(GameObject *new_root, bool unallocate_previous) {
     _root->set_window(this);
 }
 
-void GameWindow::set_on_game_start(std::function<void(sf::RenderWindow*)> func) {
+void GameWindow::set_on_game_start(std::function<void(GameWindow*)> func) {
     _on_game_start_func = func;
 }
 
-void GameWindow::set_on_game_end(std::function<void(sf::RenderWindow*)> func) {
+void GameWindow::set_on_game_end(std::function<void(GameWindow*)> func) {
     _on_game_end_func = func;
 }
 
-void GameWindow::set_update(std::function<void(float, sf::RenderWindow*)> func) {
+void GameWindow::set_update(std::function<void(float, GameWindow*)> func) {
     _update_func = func;
 }
 
@@ -68,7 +68,7 @@ void GameWindow::run() {
     sf::RenderWindow window(sf::VideoMode({_resolution.x, _resolution.y}), _title);
     
     if (_on_game_start_func) {
-        _on_game_start_func(&window);
+        _on_game_start_func(this);
     }
     
     while (window.isOpen()) {
@@ -83,7 +83,7 @@ void GameWindow::run() {
         window.clear(sf::Color(48, 48, 48));
         _process(&window, _root, delta);
         if (_update_func) {
-            _update_func(delta, &window);
+            _update_func(delta, this);
         }
         _physics_space_2d.physics_update(delta);
 
@@ -92,7 +92,7 @@ void GameWindow::run() {
     }
 
     if (_on_game_end_func) {
-        _on_game_end_func(&window);
+        _on_game_end_func(this);
     }
 }
 

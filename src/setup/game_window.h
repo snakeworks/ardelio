@@ -18,9 +18,9 @@ public:
     
     GameObject *get_root() const;
     void load_root(GameObject *new_root, bool unallocate_previous = true);
-    void set_on_game_start(std::function<void(sf::RenderWindow*)> func);
-    void set_on_game_end(std::function<void(sf::RenderWindow*)> func);
-    void set_update(std::function<void(float, sf::RenderWindow*)> func);
+    void set_on_game_start(std::function<void(GameWindow*)> func);
+    void set_on_game_end(std::function<void(GameWindow*)> func);
+    void set_update(std::function<void(float, GameWindow*)> func);
     void run();
 
     void on_game_object_enter(GameObject *game_object);
@@ -35,9 +35,9 @@ private:
     Vector2U _resolution;
     std::string _title;
     GameObject *_root;
-    std::function<void(sf::RenderWindow*)> _on_game_start_func;
-    std::function<void(sf::RenderWindow*)> _on_game_end_func;
-    std::function<void(float, sf::RenderWindow*)> _update_func;
+    std::function<void(GameWindow*)> _on_game_start_func;
+    std::function<void(GameWindow*)> _on_game_end_func;
+    std::function<void(float, GameWindow*)> _update_func;
     PhysicsSpace2D _physics_space_2d;
     GUI _gui;
     void _process(sf::RenderWindow *window, GameObject *start, const float &delta);
