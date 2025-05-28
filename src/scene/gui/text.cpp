@@ -22,10 +22,36 @@ Text::Text(const std::string &name)
             }
         )
     );
+    _property_list.push_back(
+        Property(
+            "font_size", group_name,
+            [this]() {
+                float font_size = get_font_size();
+                return Variant(VariantType::FLOAT, &font_size);
+            },
+            [this](Variant variant) {
+                set_font_size(variant.as_float());
+            }
+        )
+    );
+    _property_list.push_back(
+        Property(
+            "modulate", group_name,
+            [this]() {
+                Color modulate = get_modulate();
+                return Variant(VariantType::COLOR, &modulate);
+            },
+            [this](Variant variant) {
+                set_modulate(variant.as_color());
+            }
+        )
+    );
 }
 
 void Text::render(sf::RenderTarget *target) {
     _sf_text.setFillColor(get_modulate().get_sf_color());
+    sf::FloatRect text_bounds = _sf_text.getLocalBounds();
+    _sf_text.setOrigin({text_bounds.size.x / 2.0f, text_bounds.size.y / 2.0f});
     _sf_text.setPosition({get_global_position().x, get_global_position().y});
     target->draw(_sf_text);
 }
