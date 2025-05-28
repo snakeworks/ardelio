@@ -18,6 +18,6 @@ Texture::Texture(const std::string &path) : Resource(path) {
     }
 }
 
-const sf::Texture &Texture::get_sf_texture() const {
+sf::Texture &Texture::get_sf_texture() {
     return _sf_texture;
 }

@@ -88,7 +88,7 @@ void Sprite2D::set_texture(Texture *new_texture) {
         _texture = nullptr;
     }
     _texture = new_texture;
-    _sf_sprite.setTexture(_texture->get_sf_texture());
+    _sf_sprite.setTexture(_texture->get_sf_texture(), true);
 }
 
 const Color &Sprite2D::get_modulate() const {
