@@ -89,6 +89,15 @@ const std::vector<GameObject*> &GameObject::get_children() const {
     return _children;
 }
 
+GameObject *GameObject::find(const std::string &name) {
+    for (auto child : get_children()) {
+        if (child->get_name() == name) {
+            return child;
+        }
+    }
+    return nullptr;
+}
+
 void GameObject::add_child(GameObject *child) {
     if (child && child->_parent == nullptr) {
         child->_parent = this;

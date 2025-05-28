@@ -6,3 +6,4 @@
 #include "resources/resource.h"
 #include "resources/texture.h"
 #include "scene/gui/text.h"
+#include "input/input.h"

@@ -56,9 +56,9 @@ void EditorWindow::run() {
         // terrible but it works.
         ImGui::Begin("Viewport");
         static ImVec2 viewportSize{500, 500};
+        viewportSize = ImGui::GetContentRegionAvail();
         sf::RenderTexture viewportTexture({static_cast<uint32_t>(viewportSize.x), static_cast<uint32_t>(viewportSize.y)});
         viewportTexture.clear({48, 48, 48});
-        viewportSize = ImGui::GetContentRegionAvail();
         ImGui::Image(viewportTexture);
         ImGui::End();
         _draw_game_object(&viewportTexture, _root);

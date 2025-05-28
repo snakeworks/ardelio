@@ -3,7 +3,6 @@
 #include "math/vector2.h"
 #include "math/vector3.h"
 #include "math/color.h"
-#include <any>
 
 enum VariantType {
     NIL, // Had to call it nil because null and NULL are already reserved
