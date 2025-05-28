@@ -1,11 +1,15 @@
 #include "sprite_2d.h"
 #include "engine/engine.h"
 
+std::string *property_path = nullptr;
+
 Sprite2D::Sprite2D(const std::string &name) 
     : GameObject(name),
     _texture(new Texture()),
     _sf_sprite(_texture->get_sf_texture()),
     _modulate(Color::white) {
+        property_path = new std::string(get_texture()->get_path());
+
         auto sf_tex_size = _texture->get_sf_texture().getSize();
         set_size({
             static_cast<float>(sf_tex_size.x),
@@ -30,12 +34,10 @@ Sprite2D::Sprite2D(const std::string &name)
                 [this](Variant variant) { this->set_size(variant.as_vector2()); })
         );
         
-        // TODO: Don't just put the static texture_path variable randomly here???
-        static std::string texture_path = this->get_texture()->get_path();
         _property_list.push_back(
             Property("texture_path", group_name,
                 [this]() {
-                    return Variant(VariantType::STRING, &texture_path);
+                    return Variant(VariantType::STRING, property_path);
                 },
                 [this](Variant variant) { 
                     std::string path = variant.as_string();
@@ -43,8 +45,11 @@ Sprite2D::Sprite2D(const std::string &name)
                         return;
                     }
                     if (std::filesystem::exists(path)) {
-                        texture_path = path;
-                        Texture *new_texture = new Texture(path);
+                        if (property_path != nullptr) {
+                            delete property_path;
+                        }
+                        property_path = new std::string(path);
+                        Texture *new_texture = new Texture(*property_path);
                         this->set_texture(new_texture);
                     }
                 }
