@@ -22,4 +22,5 @@ private:
     std::string _text;
     sf::Text _sf_text;
     uint32_t _font_size;
+    std::string *_property_text;
 };

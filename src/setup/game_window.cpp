@@ -10,6 +10,7 @@ GameWindow::GameWindow(const Vector2U &resolution, const std::string &title, Gam
     : _resolution(resolution), _title(title), _root(initial_root) {
     _windows.push_back(this);
     Engine::register_engine_types();
+    Engine::set_base_directory(std::filesystem::current_path().string());
 }
 
 GameWindow::~GameWindow() {

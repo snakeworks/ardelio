@@ -16,6 +16,7 @@ static const char *_scene_file_filter_patterns[1] = {"*.ascn"};
 
 EditorWindow::EditorWindow() : _current_popup(EditorWindowPopupType::NONE) {
     Engine::register_engine_types();
+    Engine::set_base_directory(std::filesystem::current_path().string());
 }
 
 EditorWindow::~EditorWindow() {

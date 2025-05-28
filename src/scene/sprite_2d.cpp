@@ -1,14 +1,12 @@
 #include "sprite_2d.h"
 #include "engine/engine.h"
 
-std::string *property_path = nullptr;
-
 Sprite2D::Sprite2D(const std::string &name) 
     : GameObject(name),
     _texture(new Texture()),
     _sf_sprite(_texture->get_sf_texture()),
     _modulate(Color::white) {
-        property_path = new std::string(get_texture()->get_path());
+        _property_path = new std::string(get_texture()->get_path());
 
         auto sf_tex_size = _texture->get_sf_texture().getSize();
         set_size({
@@ -33,23 +31,23 @@ Sprite2D::Sprite2D(const std::string &name)
                 },
                 [this](Variant variant) { this->set_size(variant.as_vector2()); })
         );
-        
         _property_list.push_back(
             Property("texture_path", group_name,
                 [this]() {
-                    return Variant(VariantType::STRING, property_path);
+                    return Variant(VariantType::STRING, _property_path);
                 },
                 [this](Variant variant) { 
                     std::string path = variant.as_string();
                     if (this->get_texture() != nullptr && path == this->get_texture()->get_path()) {
                         return;
                     }
-                    if (std::filesystem::exists(path)) {
-                        if (property_path != nullptr) {
-                            delete property_path;
+                    std::string full_path = Engine::get_base_directory() + "/" + path;
+                    if (std::filesystem::exists(full_path)) {
+                        if (_property_path != nullptr) {
+                            delete _property_path;
                         }
-                        property_path = new std::string(path);
-                        Texture *new_texture = new Texture(*property_path);
+                        _property_path = new std::string(path);
+                        Texture *new_texture = new Texture(full_path);
                         this->set_texture(new_texture);
                     }
                 }
@@ -94,6 +92,7 @@ void Sprite2D::set_texture(Texture *new_texture) {
     }
     _texture = new_texture;
     _sf_sprite.setTexture(_texture->get_sf_texture(), true);
+    set_size(get_size()); // Hack to get texture properly scaled, lol 
 }
 
 const Color &Sprite2D::get_modulate() const {

@@ -28,4 +28,5 @@ private:
     Color _modulate;
     Vector2 _size;
     sf::Sprite _sf_sprite;
+    std::string *_property_path = nullptr; // Stupid >:(
 };

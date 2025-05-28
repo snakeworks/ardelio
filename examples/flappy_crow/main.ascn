@@ -7,9 +7,9 @@
     type: Sprite2D
     local_position: Vector3(300.000000,360.000000,0.000000)
     local_rotation: 0.000000
-    modulate: Color(4,103,167,255)
+    modulate: Color(255,255,255,255)
     size: Vector2(600.000000,720.000000)
-    texture_path: ""
+    texture_path: "assets/sky.png"
     children:
   - name: Player
     type: PhysicsBody2D
@@ -100,7 +100,7 @@
     type: Text
     local_position: Vector3(300.000000,16.000000,0.000000)
     local_rotation: 0.000000
-    text: "Press "Space" to Start"
+    text: "0"
     font_size: 32.000000
     modulate: Color(255,255,255,255)
     children:

@@ -1,9 +1,6 @@
 #include "text.h"
 #include "engine/engine.h"
 
-// TODO: Wtf is happening here
-std::string *property_text = nullptr;
-
 Text::Text(const std::string &name)
     : GUIElement(name), _text(""), 
     // TODO: Lmao, what is this nonsense
@@ -11,21 +8,21 @@ Text::Text(const std::string &name)
     _font_size(16) {
     set_text("Text");
 
-    property_text = new std::string(get_text());
+    _property_text = new std::string(get_text());
 
     const std::string group_name = "text";
     _property_list.push_back(
         Property(
             "text", group_name,
             [this]() {
-                return Variant(VariantType::STRING, property_text);
+                return Variant(VariantType::STRING, _property_text);
             },
             [this](Variant variant) {
-                if (property_text != nullptr) {
-                    delete property_text;
+                if (_property_text != nullptr) {
+                    delete _property_text;
                 }
-                property_text = new std::string(variant.as_string());
-                set_text(*property_text);
+                _property_text = new std::string(variant.as_string());
+                set_text(*_property_text);
             }
         )
     );

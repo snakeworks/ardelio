@@ -25,11 +25,16 @@ public:
     
     static void serialize_scene(GameObject *root, const std::string &file_path);
     static GameObject *deserialize_scene(const std::string &file_path);
+
+    static const std::string get_base_directory();
+    static void set_base_directory(const std::string &new_directory);    
 private:
     static const std::string _get_current_time_string();
 
     static std::vector<std::string> _logs;
     static std::unordered_map<std::string, instance_creator> _creators;
+
+    static std::string _base_directory;
 };
 
 #define NAMEOF(X) #X

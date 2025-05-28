@@ -5,9 +5,10 @@
 
 std::vector<std::string> Engine::_logs = {};
 std::unordered_map<std::string, Engine::instance_creator> Engine::_creators = {};
+std::string Engine::_base_directory = "";
 
 const std::string Engine::get_version() {
-    return "v0.48";
+    return "v0.64";
 }
 
 void Engine::register_type(const std::string &type_name, instance_creator creator) {
@@ -166,4 +167,12 @@ GameObject *Engine::deserialize_scene(const std::string &file_path) {
 
     file.close();
     return root;
+}
+
+const std::string Engine::get_base_directory() {
+    return _base_directory;
+}
+
+void Engine::set_base_directory(const std::string &new_directory) {
+    _base_directory = new_directory;
 }
