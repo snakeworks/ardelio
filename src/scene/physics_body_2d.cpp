@@ -156,7 +156,11 @@ bool PhysicsBody2D::get_static() const {
 }
 
 void PhysicsBody2D::set_static(bool new_static) { 
-    _static = new_static; 
+    if (new_static == true) {
+        set_velocity(Vector2::zero);
+        set_temp_velocity(Vector2::zero);
+    }
+    _static = new_static;
 }
 
 std::string PhysicsBody2D::nameof_type() const {
