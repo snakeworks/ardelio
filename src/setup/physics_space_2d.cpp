@@ -85,6 +85,9 @@ void PhysicsSpace2D::circle_vs_circle_collision(PhysicsBody2D *o, PhysicsBody2D 
             p->set_temp_position({ o->get_global_position_2d().x + (p->get_shape()->get_radius() + 0.1f), 
                                   o->get_global_position_2d().y });
         }
+
+        o->set_last_colliding_body(p);
+        p->set_last_colliding_body(o);
     }
 }
 
@@ -167,6 +170,9 @@ void PhysicsSpace2D::circle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsBody
         int r = rand() % 2;
         float ang_velocity = (r == 0) ? velocity_i_j.length() : -velocity_i_j.length();
         o->set_theta_dot(ang_velocity / 2.0f);
+
+        o->set_last_colliding_body(p);
+        p->set_last_colliding_body(o);
     }
 }
 
@@ -192,7 +198,7 @@ void PhysicsSpace2D::rectangle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsB
             if (pos_o.x < pos_p.x) {
                 normal_unit = { -1.0f, 0.0f };
                 correction = normal_unit * dx;
-            } else {                  
+            } else {
                 normal_unit = { 1.0f, 0.0f };
                 correction = normal_unit * dx;
             }
@@ -243,6 +249,9 @@ void PhysicsSpace2D::rectangle_vs_rectangle_collision(PhysicsBody2D *o, PhysicsB
 
         Vector2 velocity_i_j = normal_velocity + tangent_velocity;
         o->set_temp_velocity(velocity_i_j);
+        
+        o->set_last_colliding_body(p);
+        p->set_last_colliding_body(o);
     }
 }
 
@@ -296,6 +305,7 @@ void PhysicsSpace2D::physics_update(float delta) {
     }
 
     for (PhysicsBody2D *o : _bodies) {
+        o->set_last_colliding_body(nullptr);
         // Static Bodies can be targets (collided with and resolved from), but are not resolved themselves.
         if (o->get_static()) {
             continue;

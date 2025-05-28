@@ -13,6 +13,9 @@ public:
     CollisionShape *get_shape() const;
     void set_shape(CollisionShape *new_shape);
 
+    PhysicsBody2D *get_last_colliding_body();
+    void set_last_colliding_body(PhysicsBody2D *body);
+
     Vector2 get_temp_position();
     void set_temp_position(const Vector2 &new_temp_position);
     
@@ -54,6 +57,8 @@ protected:
     bool _static;
     
     CollisionShape *_shape;
+
+    PhysicsBody2D *_last_colliding_body;
 
     Vector2 _velocity;
     Vector2 _temp_position;

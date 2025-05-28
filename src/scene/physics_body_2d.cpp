@@ -2,7 +2,7 @@
 #include "engine/engine.h"
 
 PhysicsBody2D::PhysicsBody2D(const std::string &name) : GameObject(name), _shape(new CollisionShape({32.0f, 32.0f})), _static(false), _mass(1.0f), 
-    _theta_dot(0.0f), _theta_dot_dot(0.0f), _itheta_dot_dot(0.0f), _inertia(1.0f),  _restitution(1.0f)
+    _theta_dot(0.0f), _theta_dot_dot(0.0f), _itheta_dot_dot(0.0f), _inertia(1.0f),  _restitution(1.0f), _last_colliding_body(nullptr)
 {
     const std::string group_name = "physics_body_2d";
     _property_list.push_back(
@@ -46,6 +46,14 @@ CollisionShape *PhysicsBody2D::get_shape() const {
 
 void PhysicsBody2D::set_shape(CollisionShape *new_shape) {
     _shape = new_shape;
+}
+
+PhysicsBody2D *PhysicsBody2D::get_last_colliding_body() {
+    return _last_colliding_body;
+}
+
+void PhysicsBody2D::set_last_colliding_body(PhysicsBody2D *body) {
+    _last_colliding_body = body;
 }
 
 Vector2 PhysicsBody2D::get_temp_position() { 

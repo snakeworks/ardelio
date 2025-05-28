@@ -29,9 +29,9 @@ public:
 
     GameObject *get_child(uint32_t index) const;
     const std::vector<GameObject*> &get_children() const;
+    GameObject *find(const std::string &name);
     void add_child(GameObject *child);
     GameObject *remove_child(GameObject *child);
-    GameObject *find(const std::string &name);
 
     GameObject *get_parent() const;
     void reparent(GameObject *new_parent, bool keep_global_position = true);
