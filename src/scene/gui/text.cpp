@@ -11,13 +11,14 @@ Text::Text(const std::string &name)
     _font_size(16) {
     set_text("Text");
 
+    property_text = new std::string(get_text());
+
     const std::string group_name = "text";
     _property_list.push_back(
         Property(
             "text", group_name,
             [this]() {
-                std::string s = get_text();
-                return Variant(VariantType::STRING, &s);
+                return Variant(VariantType::STRING, property_text);
             },
             [this](Variant variant) {
                 if (property_text != nullptr) {
