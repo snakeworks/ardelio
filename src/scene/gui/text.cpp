@@ -1,13 +1,32 @@
 #include "text.h"
 #include "engine/engine.h"
 
-Text::Text(const std::string &name, const std::string &text, const Font *font)
-    : GUIElement(name), _text(text), _sf_text(font->get_sf_font()), _font_size(16) {
-    set_text(text);
+Text::Text(const std::string &name)
+    : GUIElement(name), _text(""), 
+    // TODO: Lmao, what is this nonsense
+    _sf_text((new Font(std::string(__FILE__).substr(0, std::string(__FILE__).find_last_of('/')) + "/../../misc/Roboto-Medium.ttf"))->get_sf_font()), 
+    _font_size(16) {
+    set_text("Text");
+
+    const std::string group_name = "text";
+    static std::string text = get_text();
+    _property_list.push_back(
+        Property(
+            "text", group_name,
+            [this]() {
+                return Variant(VariantType::STRING, &text);
+            },
+            [this](Variant variant) {
+                text = variant.as_string();
+                set_text(text);
+            }
+        )
+    );
 }
 
 void Text::render(sf::RenderTarget *target) {
     _sf_text.setFillColor(get_modulate().get_sf_color());
+    _sf_text.setPosition({get_global_position().x, get_global_position().y});
     target->draw(_sf_text);
 }
 

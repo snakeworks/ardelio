@@ -7,7 +7,7 @@
 
 class Text : public GUIElement {
 public:
-    Text(const std::string &name, const std::string &text, const Font *font);
+    Text(const std::string &name);
 
     void render(sf::RenderTarget *target) override;
 

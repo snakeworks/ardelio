@@ -18,6 +18,7 @@ void Engine::register_engine_types() {
     REGISTER_TYPE(GameObject);
     REGISTER_TYPE(Sprite2D);
     REGISTER_TYPE(PhysicsBody2D);
+    REGISTER_TYPE(Text);
 }
 
 GameObject *Engine::create(const std::string &type_name) {
