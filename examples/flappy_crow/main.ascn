@@ -16,15 +16,15 @@
     local_position: Vector3(92.000000,265.000000,0.000000)
     local_rotation: 0.000000
     is_static: false
-    shape_size: Vector2(32.000000,32.000000)
+    shape_size: Vector2(48.000000,48.000000)
     children:
     - name: Sprite2D
       type: Sprite2D
       local_position: Vector3(0.000000,0.000000,0.000000)
       local_rotation: 0.000000
       modulate: Color(255,255,255,255)
-      size: Vector2(32.000000,32.000000)
-      texture_path: ""
+      size: Vector2(48.000000,48.000000)
+      texture_path: "assets/bird.png"
       children:
   - name: Pipe1
     type: GameObject
@@ -43,8 +43,8 @@
         local_position: Vector3(0.000000,0.000000,0.000000)
         local_rotation: 0.000000
         modulate: Color(255,255,255,255)
-        size: Vector2(32.000000,500.000000)
-        texture_path: ""
+        size: Vector2(64.000000,500.000000)
+        texture_path: "assets/pipe.png"
         children:
     - name: Bottom
       type: PhysicsBody2D
@@ -56,10 +56,10 @@
       - name: Sprite2D
         type: Sprite2D
         local_position: Vector3(0.000000,0.000000,0.000000)
-        local_rotation: 0.000000
+        local_rotation: 3.140000
         modulate: Color(255,255,255,255)
-        size: Vector2(32.000000,500.000000)
-        texture_path: ""
+        size: Vector2(64.000000,500.000000)
+        texture_path: "assets/pipe.png"
         children:
   - name: Pipe2
     type: GameObject
@@ -78,8 +78,8 @@
         local_position: Vector3(0.000000,0.000000,0.000000)
         local_rotation: 0.000000
         modulate: Color(255,255,255,255)
-        size: Vector2(32.000000,500.000000)
-        texture_path: ""
+        size: Vector2(64.000000,500.000000)
+        texture_path: "assets/pipe.png"
         children:
     - name: Bottom
       type: PhysicsBody2D
@@ -91,10 +91,10 @@
       - name: Sprite2D
         type: Sprite2D
         local_position: Vector3(0.000000,0.000000,0.000000)
-        local_rotation: 0.000000
+        local_rotation: 3.140000
         modulate: Color(255,255,255,255)
-        size: Vector2(32.000000,500.000000)
-        texture_path: ""
+        size: Vector2(64.000000,500.000000)
+        texture_path: "assets/pipe.png"
         children:
   - name: ScoreText
     type: Text
@@ -106,18 +106,18 @@
     children:
   - name: Ground
     type: PhysicsBody2D
-    local_position: Vector3(597.000000,700.000000,0.000000)
+    local_position: Vector3(300.000000,700.000000,0.000000)
     local_rotation: 0.000000
     is_static: true
-    shape_size: Vector2(1280.000000,88.000000)
+    shape_size: Vector2(600.000000,64.000000)
     children:
     - name: Sprite2D
       type: Sprite2D
       local_position: Vector3(0.000000,0.000000,0.000000)
       local_rotation: 0.000000
-      modulate: Color(13,230,44,255)
-      size: Vector2(1280.000000,64.000000)
-      texture_path: ""
+      modulate: Color(255,255,255,255)
+      size: Vector2(600.000000,64.000000)
+      texture_path: "assets/ground.png"
       children:
   - name: CenterText
     type: Text

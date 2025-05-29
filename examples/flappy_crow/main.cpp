@@ -99,7 +99,12 @@ void _update(float delta, GameWindow *window) {
                 Vector2 new_velocity = Vector2(0, player->get_velocity().y);
                 new_velocity.y = -300.0f;
                 player->set_velocity(new_velocity);
+                player->set_global_rotation(0); // Reset rotation when jumping
             }
+
+            // Rotate player based on velocity
+            float rotation_angle = std::clamp(player->get_velocity().y * 0.1f, -30.0f, 90.0f) * (3.14159f / 180.0f);
+            player->set_global_rotation(rotation_angle);
 
             // Move pipes
             Vector3 move_factor(-200, 0, 0);
