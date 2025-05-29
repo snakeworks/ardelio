@@ -98,12 +98,20 @@
         children:
   - name: ScoreText
     type: Text
-    local_position: Vector3(300.000000,16.000000,0.000000)
+    local_position: Vector3(300.000000,45.000000,0.000000)
     local_rotation: 0.000000
     text: "0"
-    font_size: 32.000000
-    modulate: Color(255,255,255,255)
+    font_size: 50.000000
+    modulate: Color(0,0,0,255)
     children:
+    - name: Text
+      type: Text
+      local_position: Vector3(-3.000000,-3.000000,0.000000)
+      local_rotation: 0.000000
+      text: "0"
+      font_size: 50.000000
+      modulate: Color(255,255,255,255)
+      children:
   - name: Ground
     type: PhysicsBody2D
     local_position: Vector3(300.000000,700.000000,0.000000)
@@ -123,7 +131,15 @@
     type: Text
     local_position: Vector3(300.000000,360.000000,0.000000)
     local_rotation: 0.000000
-    text: "Press "Space" to Start"
-    font_size: 16.000000
-    modulate: Color(255,255,255,255)
+    text: "Press "Space to Start"
+    font_size: 24.000000
+    modulate: Color(0,0,0,255)
     children:
+    - name: Text
+      type: Text
+      local_position: Vector3(-2.000000,-2.000000,0.000000)
+      local_rotation: 0.000000
+      text: "Press "Space to Start"
+      font_size: 24.000000
+      modulate: Color(255,255,255,255)
+      children:

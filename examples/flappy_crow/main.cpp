@@ -18,18 +18,31 @@ struct Pipe {
 GameState game_state = GameState::MENU;
 
 Text *center_text;
+Text *center_text_shadow;
+Text *score_text;
+Text *score_text_shadow;
+
 PhysicsBody2D *player;
 PhysicsBody2D *ground;
-Text *score_text;
 
 std::vector<Pipe> pipes;
 
 uint32_t current_score = 0;
 
+void set_center_text(std::string str) {
+    center_text->set_text(str);
+    center_text_shadow->set_text(str);
+}
+
+void set_score_text(std::string str) {
+    score_text->set_text(str);
+    score_text_shadow->set_text(str);
+}
+
 void restart_game() {
     game_state = GameState::MENU;
     current_score = 0;
-    score_text->set_text(std::to_string(current_score));
+    set_score_text(std::to_string(current_score));
     int amount = 1;
     for (auto &pipe : pipes) {
         pipe.scored = false;
@@ -43,7 +56,9 @@ void _on_game_start(GameWindow *window) {
     player = dynamic_cast<PhysicsBody2D*>(window->get_root()->find("Player"));
     ground = dynamic_cast<PhysicsBody2D*>(window->get_root()->find("Ground"));
     score_text = dynamic_cast<Text*>(window->get_root()->find("ScoreText"));
+    score_text_shadow = dynamic_cast<Text*>(score_text->get_child(0));
     center_text = dynamic_cast<Text*>(window->get_root()->find("CenterText"));
+    center_text_shadow = dynamic_cast<Text*>(center_text->get_child(0));
 
     // Initialize pipes
     for (int i = 1; i <= 2; ++i) { // Adjust the range for more pipes
@@ -79,10 +94,10 @@ void _update(float delta, GameWindow *window) {
     switch (game_state) {
         case GameState::MENU: {
             player->set_static(true);
-            center_text->set_text("Press 'Space' to Start");
+            set_center_text("Press 'Space' to Start");
             if (Input::was_pressed_this_frame(Keycode::Space)) {
                 game_state = GameState::PLAYING;
-                center_text->set_text("");
+                set_center_text("");
             }
             break;
         }
@@ -122,11 +137,11 @@ void _update(float delta, GameWindow *window) {
                 }
             }
 
-            score_text->set_text(std::to_string(current_score));
+            set_score_text(std::to_string(current_score));
             break;
         }
         case GameState::DEAD: {
-            center_text->set_text("You've lost! Press 'R' to Restart.");
+            set_center_text("You've lost! Press 'R' to Restart.");
             if (Input::was_pressed_this_frame(Keycode::R)) {
                 restart_game();
             }
