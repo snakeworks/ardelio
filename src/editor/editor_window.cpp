@@ -14,7 +14,7 @@ sf::RenderWindow _window;
 static std::string _opened_scene_path = "";
 static const char *_scene_file_filter_patterns[1] = {"*.ascn"};
 
-EditorWindow::EditorWindow() : _current_popup(EditorWindowPopupType::NONE) {
+EditorWindow::EditorWindow() : _current_popup(EditorWindowPopupType::NONE), _root(nullptr) {
     Engine::register_engine_types();
     Engine::set_base_directory(std::filesystem::current_path().string());
 }
